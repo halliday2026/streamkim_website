@@ -1,9 +1,11 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'zod';
 
 // ─── Attorney ────────────────────────────────────────────────────────────────
 
 const attorneys = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/attorneys' }),
   schema: z.object({
     name: z.string(),
     title: z.enum(['Partner', 'Of Counsel', 'Associate']),
@@ -50,7 +52,7 @@ const attorneys = defineCollection({
 // ─── Practice Area ───────────────────────────────────────────────────────────
 
 const practiceAreas = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/practice-areas' }),
   schema: z.object({
     name: z.string(),
     // Strategic display order (1 = Public Entity Defense, highest priority)
@@ -79,7 +81,7 @@ const practiceAreas = defineCollection({
 // ─── Notable Matter ───────────────────────────────────────────────────────────
 
 const notableMatters = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/notable-matters' }),
   schema: z.object({
     // Short descriptive title — no client names
     title: z.string(),
@@ -99,7 +101,7 @@ const notableMatters = defineCollection({
 // ─── Insight Article ──────────────────────────────────────────────────────────
 
 const insights = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/insights' }),
   schema: z.object({
     title: z.string(),
     publishDate: z.coerce.date(),

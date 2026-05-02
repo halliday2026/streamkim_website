@@ -1,7 +1,8 @@
 # Content Models — Stream Kim Website
 
-All collections are defined in `src/content/config.ts` using Astro Content Collections + Zod.
-This document is the annotated reference; the schema file is the implementation source of truth.
+All collections are defined in `src/content.config.ts` using Astro 6 Content Collections + Zod.
+Note: In Astro 6, the config is at `src/content.config.ts` (NOT `src/content/config.ts`) and uses
+`glob` loaders. This document is the annotated reference; the schema file is the source of truth.
 
 ---
 
