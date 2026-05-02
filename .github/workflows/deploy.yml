@@ -35,9 +35,11 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          # Set SITE and BASE in repo Settings → Variables → Actions
-          # SITE = https://halliday2026.github.io  (or your custom domain)
-          # BASE = /streamkim_website              (or empty for custom domain)
+          # Optional overrides via repo Settings → Variables → Actions.
+          # If not set, astro.config.mjs defaults to https://halliday2026.github.io
+          # and /streamkim_website/ — correct for this repo without any vars needed.
+          # Set these only if deploying to a custom domain:
+          #   SITE = https://streamkim.com   BASE = /
           SITE: ${{ vars.SITE }}
           BASE: ${{ vars.BASE }}
 
