@@ -21,10 +21,13 @@
 @layer base {
   html {
     font-family: var(--font-sans);
-    color: var(--color-charcoal);
-    background-color: var(--color-offwhite);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-offwhite);
+    color: var(--color-charcoal);
   }
 
   h1,
