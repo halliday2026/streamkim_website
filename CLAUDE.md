@@ -1,7 +1,8 @@
 # CLAUDE.md — Stream Kim Website
 
-> **Strategic context:** Read `docs/strategic-brief.md` first for positioning, voice, and design
-> rationale. The files in `docs/` are the authoritative working specs; the brief is background.
+> **Strategic context:** Read [`docs/strategic-brief.md`](docs/strategic-brief.md) for positioning,
+> voice, and design rationale. The brief is background context. The files in `docs/` are the
+> authoritative, executable working specs — use those for implementation decisions.
 
 ---
 
