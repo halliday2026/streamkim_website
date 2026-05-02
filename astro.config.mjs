@@ -6,19 +6,18 @@ import tailwindcss from '@tailwindcss/vite';
 
 // DEPLOY TARGETS
 // ─────────────────────────────────────────────────────────────────────────────
-// Defaults are hardcoded to the GitHub Pages target so CI works without
-// any repository variables needing to be set.
+// Defaults are mode-aware: dev server gets localhost/no-prefix, builds get
+// the GitHub Pages URL/base. Override either value with env vars (both
+// locally and in CI). The || operator (not ??) treats empty strings as unset,
+// which matters when GitHub Actions evaluates ${{ vars.SITE }} to "" when
+// no repo variable is configured.
 //
-// Override by setting environment variables (locally or in CI):
-//
-// Local dev:       BASE=/ npm run dev  (omit to accept the /streamkim_website/ prefix)
-//
-// GitHub Pages:    SITE and BASE default to the values below — no vars needed.
-//                  If you want to override: SITE=https://halliday2026.github.io
-//                                           BASE=/streamkim_website/
-//
-// Custom domain:   SITE=https://streamkim.com  BASE=/
+// Dev:           npm run dev               → localhost:4321/
+// Build/CI:      npm run build             → halliday2026.github.io/streamkim_website/
+// Custom domain: SITE=https://streamkim.com  BASE=/ npm run build
 // ─────────────────────────────────────────────────────────────────────────────
+
+const isDev = process.argv[2] === 'dev';
 
 /**
  * Astro integration: removes src/pages/dev/** from production dist/.
@@ -41,8 +40,8 @@ function excludeDevPages() {
 }
 
 export default defineConfig({
-  site: process.env.SITE || 'https://halliday2026.github.io',
-  base: process.env.BASE || '/streamkim_website/',
+  site: process.env.SITE || (isDev ? 'http://localhost:4321' : 'https://halliday2026.github.io'),
+  base: process.env.BASE || (isDev ? '/' : '/streamkim_website/'),
   output: 'static',
   integrations: [excludeDevPages()],
   vite: {
