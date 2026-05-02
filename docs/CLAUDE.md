@@ -26,7 +26,7 @@ Do not deviate from these without explicit instruction:
 | Framework | Astro (latest stable — currently 6.x) |
 | Language | TypeScript, strict mode (`astro/tsconfigs/strict`) |
 | Styling | Tailwind CSS v4 via `@tailwindcss/vite` — CSS `@theme` config (no tailwind.config.mjs) |
-| Content | Markdown + Astro Content Collections with Zod schemas (`src/content/config.ts`) |
+| Content | Markdown + Astro Content Collections with Zod schemas (Astro 6+ `src/content.config.ts` with `glob()` loaders — do NOT use legacy `src/content/config.ts`) |
 | Package manager | npm |
 | Deployment | GitHub Pages (static output; `SITE` and `BASE` set via repo variables) |
 | Node version | ≥ 22.12.0 (LTS) |
