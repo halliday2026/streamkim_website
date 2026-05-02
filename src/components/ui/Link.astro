@@ -1,0 +1,51 @@
+---
+export interface LinkProps {
+  href: string;
+  variant?: 'body' | 'nav';
+  external?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'body',
+  external = false,
+  class: extraClass,
+} = Astro.props as LinkProps;
+
+const variantClasses: Record<NonNullable<LinkProps['variant']>, string> = {
+  // Body: oxblood, underline always visible, strong focus outline
+  body: [
+    'text-oxblood underline underline-offset-4',
+    'hover:text-[#6b0000]',
+    'focus-visible:outline-2 focus-visible:outline-oxblood focus-visible:outline-offset-2',
+  ].join(' '),
+
+  // Nav: no underline by default, underline on hover; used in menus
+  nav: [
+    'text-charcoal no-underline underline-offset-4',
+    'hover:underline hover:text-navy',
+    'focus-visible:outline-2 focus-visible:outline-navy focus-visible:outline-offset-2',
+  ].join(' '),
+};
+
+const classes = [variantClasses[variant], extraClass].filter(Boolean).join(' ');
+
+const externalAttrs = external
+  ? { target: '_blank', rel: 'noopener noreferrer' }
+  : {};
+---
+
+<a
+  href={href}
+  class={classes}
+  {...externalAttrs}
+>
+  <slot />
+  {external && (
+    <span aria-hidden="true" class="ml-0.5 text-[0.75em] align-super">↗</span>
+  )}
+  {external && (
+    <span class="sr-only">(opens in a new tab)</span>
+  )}
+</a>
