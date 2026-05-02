@@ -1,1 +1,103 @@
 @import "tailwindcss";
+
+/* ─── Brand Theme ──────────────────────────────────────────────────────────── */
+/* Tailwind v4 uses CSS @theme — no tailwind.config.mjs needed.                */
+/* Usage: bg-navy, text-oxblood, border-midgray, etc.                          */
+
+@theme {
+  --color-navy: #1F2A44;
+  --color-oxblood: #8B0000;
+  --color-offwhite: #FAF8F5;
+  --color-midgray: #6B7280;
+  --color-charcoal: #222222;
+
+  /* Font families */
+  --font-display: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, serif;
+  --font-sans: 'Inter Variable', Inter, system-ui, sans-serif;
+}
+
+/* ─── Base Layer ───────────────────────────────────────────────────────────── */
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-charcoal);
+    background-color: var(--color-offwhite);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  h1 {
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    line-height: 1.65;
+  }
+
+  a {
+    color: var(--color-oxblood);
+  }
+
+  /* Visible keyboard focus ring — WCAG 2.4.7 */
+  :focus-visible {
+    outline: 2px solid var(--color-navy);
+    outline-offset: 3px;
+  }
+
+  /* Override focus ring on dark backgrounds */
+  .bg-navy :focus-visible,
+  [data-bg="dark"] :focus-visible {
+    outline-color: var(--color-offwhite);
+  }
+
+  /* Respect reduced-motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ─── Print Styles ─────────────────────────────────────────────────────────── */
+/* Useful for attorney bio pages (vCard-style print layout).                   */
+
+@media print {
+  header,
+  footer,
+  nav,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+  }
+
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+  }
+}

@@ -1,0 +1,79 @@
+---
+import '@fontsource-variable/source-serif-4';
+import '@fontsource-variable/inter';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+}
+
+const {
+  title = 'Stream Kim Hicks Wrage & Alfaro, P.C.',
+  description = 'A Riverside civil litigation firm representing public entities, healthcare providers, construction-industry clients, and businesses across California.',
+  canonicalUrl = new URL(Astro.url.pathname, Astro.site).href,
+  ogImage = new URL('/og-default.png', Astro.site).href,
+  ogType = 'website',
+} = Astro.props;
+
+const siteTitle =
+  title === 'Stream Kim Hicks Wrage & Alfaro, P.C.'
+    ? title
+    : `${title} | Stream Kim Hicks Wrage & Alfaro, P.C.`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary meta -->
+    <title>{siteTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Stream Kim Hicks Wrage & Alfaro, P.C." />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={siteTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <!-- Page-specific head content (schema markup, etc.) -->
+    <slot name="head" />
+  </head>
+
+  <body class="bg-offwhite text-charcoal antialiased">
+    <!-- Skip to main content (first focusable element — accessibility requirement) -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-navy focus:px-4 focus:py-2 focus:text-white focus:outline-none"
+    >
+      Skip to main content
+    </a>
+
+    <slot name="header" />
+
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+  </body>
+</html>
