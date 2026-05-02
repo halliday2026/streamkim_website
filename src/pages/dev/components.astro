@@ -1,0 +1,252 @@
+---
+/**
+ * DEV-ONLY component showcase — visual regression surface for UI primitives.
+ *
+ * This page is NOT included in production builds. The `excludeDevPages`
+ * Astro integration in astro.config.mjs deletes `dist/dev/` after every
+ * `astro build`, so this file never ships to GitHub Pages.
+ *
+ * During `astro dev` it is served normally at: http://localhost:4321/dev/components
+ *
+ * Use this page to manually verify every variant and state before
+ * each session that touches Button, Link, or FormField.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/ui/Button.astro';
+import Link from '../../components/ui/Link.astro';
+import FormField from '../../components/ui/FormField.astro';
+---
+
+<BaseLayout title="Component Showcase — Dev Only">
+  <div class="max-w-3xl mx-auto px-8 py-16 space-y-20">
+
+    <header class="border-b border-gray-200 pb-6">
+      <p class="text-sm font-semibold tracking-widest uppercase text-midgray mb-2">Dev Only</p>
+      <h1 class="text-4xl">Component Showcase</h1>
+      <p class="mt-2 text-midgray">
+        This page does not appear in production builds.
+        Tab through all elements to verify keyboard navigation and focus rings.
+      </p>
+    </header>
+
+    <!-- ─── BUTTON ─────────────────────────────────────────────────────────── -->
+    <section aria-labelledby="btn-heading">
+      <h2 id="btn-heading" class="text-2xl mb-1">Button</h2>
+      <p class="text-sm text-midgray mb-8">
+        Spec: <code>src/components/ui/Button.astro</code> ·
+        Three variants × two element types (button / anchor) × disabled state.
+      </p>
+
+      <!-- Primary -->
+      <h3 class="text-lg font-semibold mb-4">Primary</h3>
+      <div class="flex flex-wrap gap-4 items-center mb-3">
+        <Button variant="primary">Schedule a Consultation</Button>
+        <Button variant="primary" href="/contact">Schedule a Consultation (link)</Button>
+        <Button variant="primary" disabled>Disabled</Button>
+        <Button variant="primary" href="/contact" disabled>Disabled link (span)</Button>
+      </div>
+      <ul class="text-sm text-midgray space-y-1 mb-10 pl-4">
+        <li>✓ Visual check: navy background, white text</li>
+        <li>✓ Visual check: hover darkens background to #162035</li>
+        <li>✓ Visual check: focus ring visible (2px navy) on Tab</li>
+        <li>✓ Visual check: disabled is 50% opacity, not clickable</li>
+        <li>✓ Visual check: disabled link renders as &lt;span&gt;, not &lt;a&gt;</li>
+      </ul>
+
+      <!-- Secondary -->
+      <h3 class="text-lg font-semibold mb-4">Secondary</h3>
+      <div class="flex flex-wrap gap-4 items-center mb-3">
+        <Button variant="secondary">Learn More</Button>
+        <Button variant="secondary" href="/attorneys">Learn More (link)</Button>
+        <Button variant="secondary" disabled>Disabled</Button>
+        <Button variant="secondary" href="/attorneys" disabled>Disabled link</Button>
+      </div>
+      <ul class="text-sm text-midgray space-y-1 mb-10 pl-4">
+        <li>✓ Visual check: navy border, navy text, transparent background</li>
+        <li>✓ Visual check: hover fills navy background, text becomes white</li>
+        <li>✓ Visual check: focus ring visible (2px navy) on Tab</li>
+        <li>✓ Visual check: disabled is 50% opacity</li>
+      </ul>
+
+      <!-- Ghost -->
+      <h3 class="text-lg font-semibold mb-4">Ghost</h3>
+      <div class="flex flex-wrap gap-4 items-center mb-3">
+        <Button variant="ghost">View Practice Areas</Button>
+        <Button variant="ghost" href="/practice-areas">View Practice Areas (link)</Button>
+        <Button variant="ghost" disabled>Disabled</Button>
+        <Button variant="ghost" href="/practice-areas" disabled>Disabled link</Button>
+      </div>
+      <ul class="text-sm text-midgray space-y-1 pl-4">
+        <li>✓ Visual check: oxblood text, no border, no background</li>
+        <li>✓ Visual check: hover adds underline</li>
+        <li>✓ Visual check: focus ring visible (2px oxblood) on Tab</li>
+        <li>✓ Visual check: disabled is 40% opacity</li>
+      </ul>
+    </section>
+
+    <!-- ─── LINK ───────────────────────────────────────────────────────────── -->
+    <section aria-labelledby="link-heading">
+      <h2 id="link-heading" class="text-2xl mb-1">Link</h2>
+      <p class="text-sm text-midgray mb-8">
+        Spec: <code>src/components/ui/Link.astro</code> ·
+        Two variants + external link with security attributes.
+      </p>
+
+      <h3 class="text-lg font-semibold mb-4">Body variant</h3>
+      <p class="text-base mb-3">
+        Stream Kim's attorneys appear in
+        <Link href="/attorneys">Riverside Superior Court</Link>
+        and across California. Read the firm's
+        <Link href="/insights">recent insights</Link>
+        on public entity defense.
+      </p>
+      <ul class="text-sm text-midgray space-y-1 mb-10 pl-4">
+        <li>✓ Visual check: oxblood color, underline always visible</li>
+        <li>✓ Visual check: hover darkens text slightly</li>
+        <li>✓ Visual check: focus outline visible (2px oxblood) on Tab</li>
+      </ul>
+
+      <h3 class="text-lg font-semibold mb-4">Nav variant</h3>
+      <nav aria-label="Example nav links" class="flex gap-6 mb-3">
+        <Link href="/firm" variant="nav">The Firm</Link>
+        <Link href="/attorneys" variant="nav">Attorneys</Link>
+        <Link href="/practice-areas" variant="nav">Practice Areas</Link>
+        <Link href="/insights" variant="nav">Insights</Link>
+      </nav>
+      <ul class="text-sm text-midgray space-y-1 mb-10 pl-4">
+        <li>✓ Visual check: charcoal text, no underline by default</li>
+        <li>✓ Visual check: hover adds underline, text turns navy</li>
+        <li>✓ Visual check: focus outline visible (2px navy) on Tab</li>
+      </ul>
+
+      <h3 class="text-lg font-semibold mb-4">External link</h3>
+      <p class="text-base mb-3">
+        View the firm's profile on
+        <Link href="https://www.martindale.com" external>Martindale-Hubbell</Link>
+        and its listing on
+        <Link href="https://www.avvo.com" external>Avvo</Link>.
+      </p>
+      <ul class="text-sm text-midgray space-y-1 pl-4">
+        <li>✓ Visual check: ↗ indicator rendered after link text</li>
+        <li>✓ Visual check: "(opens in a new tab)" announced by screen reader (sr-only)</li>
+        <li>✓ Inspect: rel="noopener noreferrer" and target="_blank" present</li>
+      </ul>
+    </section>
+
+    <!-- ─── FORMFIELD ──────────────────────────────────────────────────────── -->
+    <section aria-labelledby="form-heading">
+      <h2 id="form-heading" class="text-2xl mb-1">FormField</h2>
+      <p class="text-sm text-midgray mb-8">
+        Spec: <code>src/components/ui/FormField.astro</code> ·
+        Four input types × optional/required × error state × help text.
+      </p>
+
+      <form class="space-y-6 max-w-lg" novalidate>
+
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Text — default (optional)</h3>
+          <FormField
+            id="name-optional"
+            name="name_optional"
+            label="Full name"
+            type="text"
+            placeholder="Jane Smith"
+          />
+          <ul class="text-sm text-midgray space-y-1 mt-3 pl-4">
+            <li>✓ Visual check: no asterisk, no error styling</li>
+            <li>✓ Visual check: focus ring (2px navy) on click/Tab</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Text — required</h3>
+          <FormField
+            id="name-required"
+            name="name_required"
+            label="Full name"
+            type="text"
+            placeholder="Jane Smith"
+            required
+          />
+          <ul class="text-sm text-midgray space-y-1 mt-3 pl-4">
+            <li>✓ Visual check: oxblood asterisk visible after label</li>
+            <li>✓ Inspect: input has required attribute</li>
+            <li>✓ Screen reader: "(required)" announced after label text</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Email — required with help text</h3>
+          <FormField
+            id="email-help"
+            name="email_help"
+            label="Email address"
+            type="email"
+            placeholder="you@example.com"
+            helpText="We will respond within one business day."
+            required
+          />
+          <ul class="text-sm text-midgray space-y-1 mt-3 pl-4">
+            <li>✓ Visual check: help text visible below input in midgray</li>
+            <li>✓ Inspect: aria-describedby points to help text element</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Text — error state</h3>
+          <FormField
+            id="name-error"
+            name="name_error"
+            label="Full name"
+            type="text"
+            placeholder="Jane Smith"
+            required
+            errorMessage="Please enter your full name."
+          />
+          <ul class="text-sm text-midgray space-y-1 mt-3 pl-4">
+            <li>✓ Visual check: red border and ring on input</li>
+            <li>✓ Visual check: error message visible in red below input</li>
+            <li>✓ Inspect: aria-invalid="true" on input</li>
+            <li>✓ Inspect: aria-describedby points to error element</li>
+            <li>✓ Screen reader: role="alert" on error message</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Tel — optional</h3>
+          <FormField
+            id="phone"
+            name="phone"
+            label="Phone number"
+            type="tel"
+            placeholder="(951) 555-0100"
+          />
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Textarea — required</h3>
+          <FormField
+            id="matter"
+            name="matter"
+            label="Brief description of matter"
+            type="textarea"
+            rows={5}
+            placeholder="Describe your legal matter in a few sentences."
+            required
+          />
+          <ul class="text-sm text-midgray space-y-1 mt-3 pl-4">
+            <li>✓ Visual check: renders as textarea, not input</li>
+            <li>✓ Visual check: 5 rows visible</li>
+            <li>✓ Visual check: asterisk present (required)</li>
+          </ul>
+        </div>
+
+      </form>
+    </section>
+
+    <footer class="border-t border-gray-200 pt-6 text-sm text-midgray">
+      <p>Dev-only page · excluded from production builds via <code>excludeDevPages</code> integration</p>
+    </footer>
+
+  </div>
+</BaseLayout>
