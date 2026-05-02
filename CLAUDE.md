@@ -75,6 +75,27 @@ These must never appear in a build:
 
 ---
 
+## Non-Obvious Implementation Decisions
+
+These decisions look like they could be simplified or "improved" but must not be changed without understanding why they were made.
+
+**1. `astro.config.mjs` uses `||` not `??` for env var fallbacks**
+GitHub Actions evaluates `${{ vars.SITE }}` to `""` (empty string) when the repo variable is unset — not `null` or `undefined`. `??` (nullish coalescing) does not treat empty string as falsy, so `"" ?? fallback` returns `""`, and Astro would receive `site: ""` — an invalid URL causing a CI build failure. `||` treats empty string as falsy and falls through correctly. Do not modernize `||` to `??` in `astro.config.mjs`.
+
+**2. `astro.config.mjs` uses `process.argv[2] === 'dev'` for mode detection**
+`npm run dev` needs `site: localhost` and `base: /` while production builds need the GitHub Pages URL and base path. `process.argv[2]` is the most direct signal — it's literally the command Astro was invoked with. Do not replace this with `import.meta.env.MODE` (Astro internals, subject to change) without a specific reason.
+
+**3. GitHub Pages defaults are hardcoded in `astro.config.mjs`**
+`site: 'https://halliday2026.github.io'` and `base: '/streamkim_website/'` are the hardcoded production defaults. When the site moves to a custom domain, update both the defaults in `astro.config.mjs` and the comments in `.github/workflows/deploy.yml`. The `SITE`/`BASE` env vars (set via GitHub repo Actions variables) can override these without code changes — useful for staging — but the defaults are intentionally hardcoded for simplicity.
+
+**4. `/dev/` pages are excluded via a build-time Astro integration, not runtime gating**
+`src/pages/dev/` contains dev-only pages (component showcase, etc.) that must not appear in production output. The exclusion happens via the `excludeDevPages` integration in `astro.config.mjs`, which deletes `dist/dev/` in the `astro:build:done` hook. Runtime gating with `import.meta.env.DEV` does not work for static output — Astro pages render at build time, not at request time. Any new page added under `src/pages/dev/` is automatically excluded; do not add a second exclusion mechanism.
+
+**5. `check-placeholders.mjs` scans `dist/`, not `src/`**
+`[PLACEHOLDER — ...]` strings are allowed and expected in `src/content/` during development. The postbuild script only fails if those strings reach `dist/`. A placeholder string in a source file will not break the build until something renders it into production output — which is intentional, so content stubs can live in source while page templates are being built.
+
+---
+
 ## File Structure Conventions
 
 ```
