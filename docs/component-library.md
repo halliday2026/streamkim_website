@@ -208,6 +208,8 @@ interface NotableMatterCardProps {
 **Acceptance criteria:**
 - Done means: title, description, outcome (if present), practice area tag; no client identification
 
+**Body content:** The NotableMatter schema accepts an optional markdown body. NotableMatterCard does NOT render this body — all card data comes from frontmatter. Body content is reserved for potential future detailed-view contexts (e.g., a per-matter archive page) and should not be assumed available or rendered in card form.
+
 ---
 
 ### InsightsPreview
@@ -254,6 +256,8 @@ interface InsightCardProps {
   excerpt: string;
 }
 ```
+
+**Author resolution:** The `author` prop expects a resolved `{ name, slug }` object. The InsightArticle content collection stores `author` as a slug string only. Pages that render insights are responsible for looking up the attorney by slug (via `getEntry('attorneys', slug)`) and passing the resolved object to the card. This pattern keeps the card a pure presentational component and matches Astro's content-collection idioms.
 
 **Acceptance criteria:**
 - Done means: title links to article; date formatted; author linked; excerpt truncated if needed;

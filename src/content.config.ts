@@ -42,7 +42,7 @@ const attorneys = defineCollection({
     honors: z.array(z.string()).optional(),
     // e.g. ["Riverside County Bar Association", "CAOC"]
     memberships: z.array(z.string()).optional(),
-    email: z.string().email().optional(),
+    email: z.string().email({ message: 'Invalid email address' }).optional(),
     phone: z.string().optional(),
     // Controls display order on the attorneys index page (lower = first)
     order: z.number().int().min(1).optional(),

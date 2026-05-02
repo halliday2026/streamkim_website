@@ -94,6 +94,16 @@ GitHub Actions evaluates `${{ vars.SITE }}` to `""` (empty string) when the repo
 **5. `check-placeholders.mjs` scans `dist/`, not `src/`**
 `[PLACEHOLDER — ...]` strings are allowed and expected in `src/content/` during development. The postbuild script only fails if those strings reach `dist/`. A placeholder string in a source file will not break the build until something renders it into production output — which is intentional, so content stubs can live in source while page templates are being built.
 
+**6. Validator-required fields cannot use `[PLACEHOLDER]` strings**
+Zod schemas with format validators (email, coerce.date, numeric range, URL) reject `[PLACEHOLDER — ...]` strings because they fail validation. For these fields, use syntactically valid but obviously synthetic values:
+
+- Email: `placeholder@example.com`
+- Date: `2026-01-01` or another obviously placeholder date
+- Year (number): `0` or `2000`
+- URL: `https://example.com`
+
+The `[PLACEHOLDER]` convention applies to free-text string fields only. Validator-required fields surface in the postbuild check via the synthetic values themselves — `placeholder@example.com` reaching production is the signal that real data is missing.
+
 ---
 
 ## File Structure Conventions
