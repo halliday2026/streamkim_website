@@ -1,0 +1,90 @@
+---
+export interface ButtonProps {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  href?: string;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  variant = 'primary',
+  href,
+  type = 'button',
+  disabled = false,
+  class: extraClass,
+  ariaLabel,
+} = Astro.props as ButtonProps;
+
+// All classes written as complete literals so Tailwind v4 can scan them.
+const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
+  primary: [
+    'inline-flex items-center justify-center',
+    'bg-navy text-white',
+    'px-6 py-3 min-h-[44px]',
+    'text-sm font-semibold tracking-wide uppercase',
+    'transition-colors duration-150 cursor-pointer select-none',
+    'hover:bg-[#162035]',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2',
+    'disabled:opacity-50 disabled:cursor-not-allowed',
+  ].join(' '),
+
+  secondary: [
+    'inline-flex items-center justify-center',
+    'border-2 border-navy text-navy bg-transparent',
+    'px-6 py-3 min-h-[44px]',
+    'text-sm font-semibold',
+    'transition-colors duration-150 cursor-pointer select-none',
+    'hover:bg-navy hover:text-white',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2',
+    'disabled:opacity-50 disabled:cursor-not-allowed',
+  ].join(' '),
+
+  ghost: [
+    'inline-flex items-center justify-center',
+    'text-oxblood bg-transparent',
+    'px-4 py-2 min-h-[44px]',
+    'text-sm font-medium underline-offset-4',
+    'cursor-pointer select-none',
+    'hover:underline',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-oxblood focus-visible:ring-offset-2',
+    'disabled:opacity-40 disabled:cursor-not-allowed',
+  ].join(' '),
+};
+
+const classes = [variantClasses[variant], extraClass].filter(Boolean).join(' ');
+
+// When disabled and rendering as a link, use <span aria-disabled> —
+// anchor elements cannot be truly disabled.
+const isLink = Boolean(href);
+const isDisabledLink = isLink && disabled;
+---
+
+{isDisabledLink ? (
+  <span
+    class={classes}
+    aria-disabled="true"
+    aria-label={ariaLabel}
+    role="link"
+  >
+    <slot />
+  </span>
+) : isLink ? (
+  <a
+    href={href}
+    class={classes}
+    aria-label={ariaLabel}
+  >
+    <slot />
+  </a>
+) : (
+  <button
+    type={type}
+    class={classes}
+    disabled={disabled}
+    aria-label={ariaLabel}
+  >
+    <slot />
+  </button>
+)}
