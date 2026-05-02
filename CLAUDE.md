@@ -85,11 +85,11 @@ src/
     sections/      Page-section components (Hero, PracticeGrid, AttorneysPreview, etc.)
     ui/            Primitive components (Button, Card, Link, FormField)
   content/
-    attorneys/     One .md file per attorney
-    practice-areas/ One .md file per practice area (9 total)
+    attorneys/       One .md file per attorney
+    practice-areas/  One .md file per practice area (9 total)
     notable-matters/ One .md file per representative matter
-    insights/      One .md file per article
-    config.ts      Zod schemas for all collections
+    insights/        One .md file per article
+  content.config.ts  Zod schemas for all collections (Astro 6+ — sibling of src/content/, NOT inside it)
   layouts/         BaseLayout.astro and any page-specific layout wrappers
   pages/           Astro page files — one per route
   styles/          global.css (Tailwind base + brand theme)
