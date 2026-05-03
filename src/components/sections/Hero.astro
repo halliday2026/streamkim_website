@@ -1,6 +1,8 @@
 ---
 // Photo: Jim Witkowski (@jcw) — https://unsplash.com/photos/aFF_Tr-TyJE
 // Mission Inn, Riverside, California. Free under the Unsplash License.
+import { Image } from 'astro:assets';
+import heroImage from '../../assets/hero/riverside-hero.jpg';
 import Button from '../ui/Button.astro';
 
 export interface HeroProps {
@@ -17,12 +19,16 @@ const { headline, subhead, primaryCta, secondaryPhone } = Astro.props as HeroPro
 
   <!-- Architectural background — Mission Inn, Riverside CA -->
   <!-- alt="" intentional: purely decorative; content conveyed via headline text -->
-  <img
-    src={`${import.meta.env.BASE_URL}hero/riverside-hero.jpg`}
+  <Image
+    src={heroImage}
     alt=""
-    class="absolute inset-0 w-full h-full object-cover object-[center_35%]"
+    widths={[800, 1600, 2400]}
+    sizes="100vw"
+    format="webp"
     loading="eager"
+    decoding="async"
     fetchpriority="high"
+    class="absolute inset-0 w-full h-full object-cover object-[center_35%]"
   />
 
   <!-- Charcoal overlay — warm tones bleed through at the edges -->
