@@ -1,8 +1,26 @@
 ---
-// Stub Header — full implementation (mega-menu, mobile drawer, active states) in a later session.
-// TODO: Session #6 — wire mobile hamburger menu, add mega-menu for Practice Areas, active nav state.
+// Stub Header — full implementation (mega-menu, mobile drawer) in a later session.
+// Active nav state is wired: currentPath is passed from BaseLayout via Astro.url.pathname.
 import Button from '../ui/Button.astro';
 import Link from '../ui/Link.astro';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+// Returns true when the nav link's href matches the current page.
+// For non-root links, matches on prefix so /practice-areas/[slug] activates "Practice Areas".
+const isActive = (href: string) =>
+  href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+
+// Active class: bordeaux border-bottom. Base class preserves layout space for the
+// underline on all links (border-transparent) to prevent layout shift on navigation.
+const navClass = (href: string) =>
+  isActive(href)
+    ? 'border-b-2 border-bordeaux pb-0.5 text-bordeaux'
+    : 'border-b-2 border-transparent pb-0.5';
 ---
 
 <header role="banner" class="sticky top-0 z-50 bg-bone border-b border-charcoal/10">
@@ -20,12 +38,12 @@ import Link from '../ui/Link.astro';
 
       <!-- Desktop nav -->
       <nav aria-label="Primary navigation" class="hidden lg:flex items-center gap-7">
-        <Link href="/firm" variant="nav">Firm</Link>
-        <Link href="/attorneys" variant="nav">Attorneys</Link>
-        <Link href="/practice-areas" variant="nav">Practice Areas</Link>
-        <Link href="/insights" variant="nav">Insights</Link>
-        <Link href="/notable-matters" variant="nav">Notable Matters</Link>
-        <Link href="/contact" variant="nav">Contact</Link>
+        <Link href="/firm" variant="nav" class={navClass('/firm')}>Firm</Link>
+        <Link href="/attorneys" variant="nav" class={navClass('/attorneys')}>Attorneys</Link>
+        <Link href="/practice-areas" variant="nav" class={navClass('/practice-areas')}>Practice Areas</Link>
+        <Link href="/insights" variant="nav" class={navClass('/insights')}>Insights</Link>
+        <Link href="/notable-matters" variant="nav" class={navClass('/notable-matters')}>Notable Matters</Link>
+        <Link href="/contact" variant="nav" class={navClass('/contact')}>Contact</Link>
       </nav>
 
       <!-- Right cluster -->
@@ -41,7 +59,6 @@ import Link from '../ui/Link.astro';
           class="lg:hidden inline-flex items-center justify-center w-10 h-10 text-charcoal
                  hover:text-charcoal/70 focus-visible:outline-2 focus-visible:outline-charcoal focus-visible:outline-offset-2"
         >
-          <!-- Three-line hamburger icon -->
           <svg width="20" height="14" viewBox="0 0 20 14" fill="none" aria-hidden="true">
             <rect width="20" height="2" rx="1" fill="currentColor"/>
             <rect y="6" width="20" height="2" rx="1" fill="currentColor"/>

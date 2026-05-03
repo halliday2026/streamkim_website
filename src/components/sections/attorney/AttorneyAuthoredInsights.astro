@@ -1,0 +1,59 @@
+---
+// Insights authored by this attorney. Same author-resolution pattern as
+// PracticeRelatedInsights and InsightsPreview — consistent across the codebase.
+// See docs/component-library.md AttorneyAuthoredInsights for the spec.
+import { getEntry } from 'astro:content';
+import InsightCard from '../InsightCard.astro';
+
+export interface Article {
+  title: string;
+  slug: string;
+  publishDate: Date;
+  author: string; // raw attorney slug — resolved internally
+  practiceAreas: string[];
+  excerpt: string;
+}
+
+export interface AttorneyAuthoredInsightsProps {
+  articles: Article[];
+}
+
+const { articles } = Astro.props as AttorneyAuthoredInsightsProps;
+
+const resolvedArticles = await Promise.all(
+  articles.map(async (article) => {
+    const attorney = await getEntry('attorneys', article.author);
+    return {
+      ...article,
+      resolvedAuthor: attorney
+        ? { name: attorney.data.name, slug: attorney.id }
+        : { name: article.author, slug: article.author },
+    };
+  })
+);
+---
+
+{resolvedArticles.length > 0 && (
+  <section aria-labelledby="authored-insights-heading" class="bg-white py-16 lg:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="authored-insights-heading"
+        class="font-display text-3xl font-medium text-charcoal leading-snug tracking-[-0.01em] mb-10"
+      >
+        Authored Insights
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {resolvedArticles.map((article) => (
+          <InsightCard
+            title={article.title}
+            slug={article.slug}
+            publishDate={article.publishDate}
+            author={article.resolvedAuthor}
+            practiceAreas={article.practiceAreas}
+            excerpt={article.excerpt}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+)}

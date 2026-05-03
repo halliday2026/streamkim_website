@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AttorneyCard from '../../components/sections/AttorneyCard.astro';
+
+const attorneys = (await getCollection('attorneys')).sort(
+  (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999)
+);
+// TODO: add practice area filter when 5+ attorneys exist
+---
+
+<BaseLayout
+  title="Attorneys | Stream Kim Hicks Wrage & Alfaro, P.C."
+  description="Stream Kim's trial attorneys have represented institutions in California civil litigation for decades."
+>
+  <div class="bg-bone py-20 lg:py-28">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <header class="mb-12">
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brass mb-4">
+          The Firm
+        </p>
+        <h1 class="font-display text-4xl lg:text-5xl font-medium text-charcoal leading-snug tracking-[-0.02em]">
+          Attorneys
+        </h1>
+        <p class="mt-4 text-lg text-midgray max-w-2xl leading-relaxed">
+          Stream Kim's trial attorneys have represented institutions in California civil
+          litigation for decades across nine practice areas.
+        </p>
+      </header>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {attorneys.map((attorney) => (
+          <AttorneyCard
+            name={attorney.data.name}
+            slug={attorney.id}
+            title={attorney.data.title}
+            practiceAreas={attorney.data.practiceAreas}
+            portrait={attorney.data.portrait}
+          />
+        ))}
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>

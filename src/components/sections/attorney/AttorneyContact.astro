@@ -1,0 +1,47 @@
+---
+import Button from '../../ui/Button.astro';
+
+export interface AttorneyContactProps {
+  name: string;
+  slug: string;
+  email?: string;
+  phone?: string;
+}
+
+const { name, slug, email, phone } = Astro.props as AttorneyContactProps;
+
+const hasPhone = Boolean(phone) && !phone!.startsWith('[PLACEHOLDER');
+const hasEmail = Boolean(email) && !email!.startsWith('[PLACEHOLDER');
+---
+
+<div class="bg-charcoal/5 border-y border-charcoal/10">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex flex-wrap items-center gap-6">
+      {hasPhone && (
+        <a
+          href={`tel:${phone!.replace(/\D/g, '')}`}
+          class="text-sm font-medium text-charcoal hover:text-bordeaux hover:underline
+                 underline-offset-4 focus-visible:outline-2 focus-visible:outline-charcoal focus-visible:outline-offset-2"
+        >
+          {phone}
+        </a>
+      )}
+      {hasEmail && (
+        <a
+          href={`mailto:${email}`}
+          class="text-sm font-medium text-charcoal hover:text-bordeaux hover:underline
+                 underline-offset-4 focus-visible:outline-2 focus-visible:outline-charcoal focus-visible:outline-offset-2"
+        >
+          {email}
+        </a>
+      )}
+      <Button
+        href={`/attorneys/${slug}/vcard.vcf`}
+        variant="ghost"
+        ariaLabel={`Download vCard for ${name}`}
+      >
+        ↓ Download vCard
+      </Button>
+    </div>
+  </div>
+</div>

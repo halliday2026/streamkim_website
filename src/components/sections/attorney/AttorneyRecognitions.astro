@@ -1,0 +1,28 @@
+---
+export interface AttorneyRecognitionsProps {
+  honors: string[];
+}
+
+const { honors } = Astro.props as AttorneyRecognitionsProps;
+---
+
+{honors.length > 0 && (
+  <section aria-labelledby="recognitions-heading" class="bg-white py-12 lg:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="recognitions-heading"
+        class="font-display text-2xl font-medium text-charcoal leading-snug tracking-[-0.01em] mb-6"
+      >
+        Honors &amp; Recognitions
+      </h2>
+      <ul class="space-y-2">
+        {honors.map((honor) => (
+          <li class="flex items-start gap-3 text-sm text-charcoal leading-relaxed">
+            <span class="mt-1 shrink-0 text-bordeaux font-semibold" aria-hidden="true">·</span>
+            {honor}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

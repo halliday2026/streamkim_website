@@ -95,6 +95,8 @@ const notableMatters = defineCollection({
     tags: z.array(z.string()).default([]),
     // Controls display order within a practice area (lower = first)
     order: z.number().int().min(1).optional(),
+    // Slugs of attorneys who handled this matter — for attorney bio cross-referencing
+    attorneys: z.array(z.string()).optional(),
   }),
 });
 

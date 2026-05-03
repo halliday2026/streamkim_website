@@ -1,0 +1,43 @@
+---
+import NotableMatterCard from '../NotableMatterCard.astro';
+
+export interface Matter {
+  title: string;
+  practiceArea: string;
+  description: string;
+  outcome?: string;
+}
+
+export interface PracticeRepresentativeMattersProps {
+  matters: Matter[];
+}
+
+const { matters } = Astro.props as PracticeRepresentativeMattersProps;
+---
+
+<section aria-labelledby="matters-heading" class="bg-charcoal py-16 lg:py-20">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2
+      id="matters-heading"
+      class="font-display text-3xl font-medium text-white leading-snug tracking-[-0.01em] mb-10"
+    >
+      Representative Matters
+    </h2>
+    {matters.length > 0 ? (
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {matters.map((matter) => (
+          <NotableMatterCard
+            title={matter.title}
+            practiceArea={matter.practiceArea}
+            description={matter.description}
+            outcome={matter.outcome}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="text-bone/60 text-base">
+        Representative matters for this practice area will appear here.
+      </p>
+    )}
+  </div>
+</section>

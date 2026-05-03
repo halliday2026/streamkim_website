@@ -1,0 +1,65 @@
+---
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export interface PracticeFAQProps {
+  faqItems: FAQItem[];
+}
+
+const { faqItems } = Astro.props as PracticeFAQProps;
+---
+
+{faqItems.length > 0 && (
+  <section aria-labelledby="faq-heading" class="bg-bone py-16 lg:py-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="faq-heading"
+        class="font-display text-3xl font-medium text-charcoal leading-snug tracking-[-0.01em] mb-10"
+      >
+        Frequently Asked Questions
+      </h2>
+      <!-- <details>/<summary> handles Tab, Enter, Space natively — no JS needed -->
+      {faqItems.map((item) => (
+        <details class="border-b border-charcoal/10 py-5 group">
+          <summary class="flex items-center justify-between gap-4 cursor-pointer list-none
+                          font-display text-lg font-medium text-charcoal leading-snug
+                          hover:text-charcoal/80 focus-visible:outline-2 focus-visible:outline-charcoal focus-visible:outline-offset-2">
+            {item.question}
+            <!-- Chevron rotates open/closed via CSS -->
+            <svg
+              class="faq-chevron shrink-0 w-4 h-4 text-bordeaux"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M6 3l5 5-5 5" />
+            </svg>
+          </summary>
+          <div class="mt-4 text-base text-charcoal leading-relaxed">
+            {item.answer}
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  /* Remove default disclosure marker across browsers */
+  details summary { list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+
+  /* Chevron rotates 90deg when the details element is open */
+  .faq-chevron { transition: transform 150ms ease; }
+  details[open] .faq-chevron { transform: rotate(90deg); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-chevron { transition: none; }
+  }
+</style>

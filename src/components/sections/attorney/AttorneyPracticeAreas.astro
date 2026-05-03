@@ -1,0 +1,38 @@
+---
+export interface Practice {
+  name: string;
+  slug: string;
+}
+
+export interface AttorneyPracticeAreasProps {
+  practices: Practice[];
+}
+
+const { practices } = Astro.props as AttorneyPracticeAreasProps;
+---
+
+{practices.length > 0 && (
+  <section aria-labelledby="attorney-practices-heading" class="bg-bone py-12 lg:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="attorney-practices-heading"
+        class="font-display text-2xl font-medium text-charcoal leading-snug tracking-[-0.01em] mb-6"
+      >
+        Practice Areas
+      </h2>
+      <div class="flex flex-wrap gap-3">
+        {practices.map((practice) => (
+          <a
+            href={`/practice-areas/${practice.slug}`}
+            class="inline-flex items-center px-4 py-2 border border-charcoal/20 text-sm
+                   font-medium text-charcoal hover:border-bordeaux hover:text-bordeaux
+                   transition-colors duration-150 focus-visible:outline-2
+                   focus-visible:outline-charcoal focus-visible:outline-offset-2"
+          >
+            {practice.name}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

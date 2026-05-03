@@ -1,0 +1,28 @@
+---
+export interface PracticeCapabilitiesProps {
+  capabilities: string[];
+}
+
+const { capabilities } = Astro.props as PracticeCapabilitiesProps;
+---
+
+{capabilities.length > 0 && (
+  <section aria-labelledby="capabilities-heading" class="bg-white py-16 lg:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="capabilities-heading"
+        class="font-display text-3xl font-medium text-charcoal leading-snug tracking-[-0.01em] mb-10"
+      >
+        Our Capabilities
+      </h2>
+      <ul class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-3">
+        {capabilities.map((item) => (
+          <li class="flex items-start gap-3 text-base text-charcoal leading-relaxed">
+            <span class="mt-1 shrink-0 text-bordeaux font-semibold" aria-hidden="true">·</span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

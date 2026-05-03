@@ -1,0 +1,74 @@
+---
+// Dual-source notable matters:
+// 1. collectionMatters — from the notable-matters collection, filtered by attorneys[] field (richer data)
+// 2. inlineMatters — from attorney.data.notableMatters[] (plain ethics-compliant strings)
+//
+// Collection matters render first as structured cards. Inline matters render below as
+// text blocks. In production, inline strings should be removed from attorney frontmatter
+// once the corresponding matter has been added to the collection with the attorney's slug.
+// There is no automatic deduplication — see docs/component-library.md AttorneyNotableMatters.
+
+export interface CollectionMatter {
+  title: string;
+  practiceArea: string;
+  description: string;
+  outcome?: string;
+}
+
+export interface AttorneyNotableMatterProps {
+  collectionMatters: CollectionMatter[];
+  inlineMatters: string[];
+}
+
+const { collectionMatters, inlineMatters } = Astro.props as AttorneyNotableMatterProps;
+
+const hasAny = collectionMatters.length > 0 || inlineMatters.length > 0;
+---
+
+{hasAny && (
+  <section aria-labelledby="attorney-matters-heading" class="bg-charcoal py-16 lg:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="attorney-matters-heading"
+        class="font-display text-3xl font-medium text-white leading-snug tracking-[-0.01em] mb-10"
+      >
+        Representative Matters
+      </h2>
+
+      <!-- Collection-backed matters (structured) -->
+      {collectionMatters.length > 0 && (
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {collectionMatters.map((matter) => (
+            <article class="border border-white/20 p-6">
+              <p class="text-xs font-semibold tracking-widest uppercase text-bone/60 mb-3">
+                {matter.practiceArea.replace(/-/g, ' ')}
+              </p>
+              <h3 class="font-display text-lg font-medium text-white leading-snug">
+                {matter.title}
+              </h3>
+              <p class="mt-3 text-sm text-bone/80 leading-relaxed">
+                {matter.description}
+              </p>
+              {matter.outcome && (
+                <p class="mt-4 text-xs font-semibold uppercase tracking-wide text-bone/60">
+                  Result: {matter.outcome}
+                </p>
+              )}
+            </article>
+          ))}
+        </div>
+      )}
+
+      <!-- Inline matters (plain strings from attorney frontmatter) -->
+      {inlineMatters.length > 0 && (
+        <div class="space-y-4">
+          {inlineMatters.map((matter) => (
+            <div class="border border-white/10 p-5">
+              <p class="text-sm text-bone/80 leading-relaxed">{matter}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+)}

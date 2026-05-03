@@ -1,0 +1,105 @@
+---
+import Button from '../../ui/Button.astro';
+import FormField from '../../ui/FormField.astro';
+
+export interface PracticeOption {
+  slug: string;
+  name: string;
+}
+
+export interface PracticeCTAProps {
+  practiceName: string;
+  practiceSlug: string;
+  formAction: string;
+  practiceOptions: PracticeOption[];
+}
+
+const { practiceName, practiceSlug, formAction, practiceOptions } =
+  Astro.props as PracticeCTAProps;
+---
+
+<section aria-labelledby="practice-contact-heading" class="bg-charcoal py-16 lg:py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2
+      id="practice-contact-heading"
+      class="font-display text-3xl font-medium text-white leading-snug tracking-[-0.01em] mb-4"
+    >
+      Discuss a {practiceName} Matter
+    </h2>
+    <p class="text-bone/80 text-lg mb-10">
+      Contact Stream Kim to speak with an attorney in this practice area.
+    </p>
+
+    <!-- TODO: Wire formAction to Formspree or Web3Forms endpoint before launch -->
+    <form action={formAction} method="POST" class="space-y-5" novalidate>
+
+      <FormField
+        id="practice-contact-name"
+        name="name"
+        label="Full name"
+        type="text"
+        required
+        placeholder="Jane Smith"
+      />
+
+      <FormField
+        id="practice-contact-email"
+        name="email"
+        label="Email address"
+        type="email"
+        required
+        placeholder="you@example.com"
+      />
+
+      <FormField
+        id="practice-contact-phone"
+        name="phone"
+        label="Phone number"
+        type="tel"
+        placeholder="(951) 555-0100"
+      />
+
+      <!-- Practice area dropdown — pre-selects this practice area.
+           Practice options sourced from collection (same as homepage ContactCTA). -->
+      <div class="flex flex-col gap-1">
+        <label for="practice-contact-area" class="block text-sm font-medium text-white">
+          Practice area
+        </label>
+        <select
+          id="practice-contact-area"
+          name="practice_area"
+          class="block w-full border border-gray-300 px-3 py-2 text-base text-charcoal bg-white
+                 focus:outline-none focus:ring-2 focus:ring-charcoal focus:border-charcoal
+                 transition-colors duration-150"
+        >
+          <option value="">Select a practice area (optional)</option>
+          {practiceOptions.map((p) => (
+            <option value={p.slug} selected={p.slug === practiceSlug}>
+              {p.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <FormField
+        id="practice-contact-matter"
+        name="matter"
+        label="Brief description of your matter"
+        type="textarea"
+        required
+        rows={4}
+        placeholder="Describe your legal matter in a few sentences."
+      />
+
+      <Button type="submit" variant="primary-inverse" class="w-full sm:w-auto">
+        Schedule a Consultation
+      </Button>
+    </form>
+
+    <p class="mt-6 text-xs text-bone/60 leading-relaxed">
+      Submission of this form does not create an attorney-client relationship.
+      The information on this website is for general informational purposes only
+      and does not constitute legal advice.
+    </p>
+  </div>
+</section>

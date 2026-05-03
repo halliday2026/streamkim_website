@@ -32,6 +32,20 @@ Note: In Astro 6, the config is at `src/content.config.ts` (NOT `src/content/con
 | `phone` | string | no | — | Direct line |
 | `order` | number | no | min 1 | Display order on attorneys index (lower = first) |
 
+### Notable matters authoring workflow (dual-source)
+
+During the placeholder phase, attorney bios reference notable matters two ways:
+
+1. **Via the `notable-matters` collection** — structured entries with `title`, `outcome`, and `tags`,
+   where the matter's `attorneys` array includes the attorney's slug. These render as rich cards in
+   `AttorneyNotableMatters`.
+2. **Via the attorney's frontmatter `notableMatters: string[]`** — inline strings for matters not yet
+   in the collection. These render as simpler text blocks below the collection cards.
+
+**Deduplication rule:** Once a matter is added to the `notable-matters` collection with the
+attorney's slug, remove the corresponding inline string from the attorney's frontmatter. The
+collection entry is the authoritative version — do not maintain both.
+
 ### Frontmatter Template
 
 ```yaml

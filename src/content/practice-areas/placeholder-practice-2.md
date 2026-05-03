@@ -12,6 +12,17 @@ capabilitiesList:
   - "[PLACEHOLDER — Specific matter type or service 3]"
 attorneys:
   - placeholder-attorney-1
+faqItems:
+  - question: "[PLACEHOLDER — Frequently asked question relevant to this practice area]"
+    answer: >
+      [PLACEHOLDER — 2–4 sentence answer written for both SEO value and client education.
+      Plain language. No marketing-speak. Should address a genuine question a prospective
+      client or referring attorney would ask about this area of law.]
+  - question: "[PLACEHOLDER — Second frequently asked question for this practice area]"
+    answer: >
+      [PLACEHOLDER — 2–4 sentence answer to the second FAQ. Cover a different aspect of
+      the practice than the first question — e.g., jurisdiction, timeline, client type,
+      or relevant statute.]
 ---
 
 ## [PLACEHOLDER — Section heading: Overview]

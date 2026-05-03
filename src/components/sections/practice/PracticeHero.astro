@@ -1,0 +1,26 @@
+---
+export interface PracticeHeroProps {
+  name: string;
+  heroBody: string;
+  tagline: string;
+}
+
+const { name, heroBody } = Astro.props as PracticeHeroProps;
+---
+
+<section aria-labelledby="practice-hero-heading" class="bg-charcoal py-20 lg:py-28">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brass mb-6">
+      Practice Area
+    </p>
+    <h1
+      id="practice-hero-heading"
+      class="font-display text-4xl lg:text-5xl font-medium text-bone leading-snug tracking-[-0.02em] max-w-3xl"
+    >
+      {name}
+    </h1>
+    <p class="mt-6 text-lg text-bone/80 leading-relaxed max-w-3xl">
+      {heroBody}
+    </p>
+  </div>
+</section>

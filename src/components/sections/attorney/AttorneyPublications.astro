@@ -1,0 +1,54 @@
+---
+export interface AttorneyPublicationsProps {
+  publications: string[];
+  speakingEngagements: string[];
+}
+
+const { publications, speakingEngagements } = Astro.props as AttorneyPublicationsProps;
+
+const hasPublications = publications.length > 0;
+const hasSpeaking = speakingEngagements.length > 0;
+const hasAny = hasPublications || hasSpeaking;
+---
+
+{hasAny && (
+  <section aria-labelledby="publications-heading" class="bg-bone py-12 lg:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="publications-heading"
+        class="font-display text-2xl font-medium text-charcoal leading-snug tracking-[-0.01em] mb-8"
+      >
+        Publications &amp; Speaking
+      </h2>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+        {hasPublications && (
+          <div>
+            <h3 class="font-display text-lg font-medium text-charcoal mb-4">
+              Publications
+            </h3>
+            <ul class="space-y-2">
+              {publications.map((pub) => (
+                <li class="text-sm text-charcoal leading-relaxed">{pub}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {hasSpeaking && (
+          <div>
+            <h3 class="font-display text-lg font-medium text-charcoal mb-4">
+              Speaking Engagements
+            </h3>
+            <ul class="space-y-2">
+              {speakingEngagements.map((engagement) => (
+                <li class="text-sm text-charcoal leading-relaxed">{engagement}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+      </div>
+    </div>
+  </section>
+)}

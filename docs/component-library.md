@@ -388,6 +388,79 @@ interface HeaderProps {
 
 ---
 
+## Practice Page Components (`src/components/sections/practice/`)
+
+Components specific to the practice area page template. All live in the `practice/` sub-directory.
+
+---
+
+### AttorneyNotableMatters
+
+**Purpose:** Renders notable matters on an attorney bio page. Uses a dual-source pattern: structured
+matters from the `notable-matters` collection (richer data: title, outcome) plus inline matter
+strings from the attorney's frontmatter `notableMatters[]` as a fallback.
+
+**Data sources (queried at page level, passed as props):**
+```typescript
+interface AttorneyNotableMatterProps {
+  // From notable-matters collection, filtered by attorneys array containing this attorney's slug
+  collectionMatters: Array<{
+    title: string;
+    practiceArea: string;
+    description: string;
+    outcome?: string;
+  }>;
+  // From attorney.data.notableMatters — inline strings, ethics-compliant case descriptions
+  inlineMatters: string[];
+}
+```
+
+**Rendering logic:**
+- Collection matters render first as structured cards (same styling as NotableMatterCard)
+- Inline matters render below as simpler text blocks if any are present
+- The whole component renders only if at least one of the two arrays is non-empty
+- **Deduplication note:** In production, once a matter is added to the collection with the
+  attorney's slug in the `attorneys` field, the corresponding inline string should be removed
+  from the attorney's frontmatter. There is no automatic deduplication — maintaining them as two
+  separate lists is intentional during the transition period.
+
+**Acceptance criteria:**
+- Done means: collection matters render as cards with title/outcome; inline matters render as
+  text; both render correctly when either or both sources are empty; section hidden if both empty
+
+---
+
+### AttorneyAuthoredInsights
+
+**Purpose:** Displays insights authored by this attorney on their bio page. Reuses the same
+`InsightCard` + author-resolution pattern as `InsightsPreview` and `PracticeRelatedInsights`.
+
+**Data source:** `notable-matters` collection filtered at page level — insights where
+`data.author === attorneySlug` and `data.draft === false`, sorted newest-first, capped at 3.
+
+**Props:**
+```typescript
+interface AttorneyAuthoredInsightsProps {
+  articles: Array<{
+    title: string;
+    slug: string;
+    publishDate: Date;
+    author: string; // raw slug — resolved internally to { name, slug } before InsightCard
+    practiceAreas: string[];
+    excerpt: string;
+  }>;
+}
+```
+
+**Rendering:** 3-column grid of InsightCard. Section heading: "Authored Insights". Hidden if
+`articles.length === 0` (e.g., attorney has no published non-draft insights yet).
+
+**Acceptance criteria:**
+- Done means: 1–3 insight cards rendered; author self-link resolves; section hidden when empty;
+  follows same author-resolution pattern as InsightsPreview and PracticeRelatedInsights
+
+---
+
 ## UI Components (`src/components/ui/`)
 
 ---

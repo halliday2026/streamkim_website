@@ -166,6 +166,9 @@ outcome: "Defense verdict"           # Optional: Defense verdict | Summary judgm
 tags:                                # Optional; additional practice slugs for filtering
   - public-entity-defense
   - employment-law
+attorneys:                           # Optional; slugs of attorneys who handled this matter
+  - attorney-slug-1                  # Include to surface this matter on attorney bio pages
+  - attorney-slug-2                  # Omit if the matter is not attorney-specific
 order: 1                             # Optional; controls sort order within a practice
 ---
 

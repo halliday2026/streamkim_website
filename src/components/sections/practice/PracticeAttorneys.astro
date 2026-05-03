@@ -1,0 +1,41 @@
+---
+import AttorneyCard from '../AttorneyCard.astro';
+
+export interface Attorney {
+  name: string;
+  slug: string;
+  title: string;
+  practiceAreas: string[];
+  portrait?: string;
+}
+
+export interface PracticeAttorneysProps {
+  attorneys: Attorney[];
+}
+
+const { attorneys } = Astro.props as PracticeAttorneysProps;
+---
+
+{attorneys.length > 0 && (
+  <section aria-labelledby="practice-attorneys-heading" class="bg-bone py-16 lg:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="practice-attorneys-heading"
+        class="font-display text-3xl font-medium text-charcoal leading-snug tracking-[-0.01em] mb-10"
+      >
+        Attorneys in This Practice
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {attorneys.map((attorney) => (
+          <AttorneyCard
+            name={attorney.name}
+            slug={attorney.slug}
+            title={attorney.title}
+            practiceAreas={attorney.practiceAreas}
+            portrait={attorney.portrait}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+)}

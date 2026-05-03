@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+---
+
+<BaseLayout
+  title="Page Not Found | Stream Kim Hicks Wrage & Alfaro, P.C."
+  description="The page you requested could not be found."
+>
+  <div class="bg-bone min-h-[60vh] flex items-center">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brass mb-6">
+        404
+      </p>
+      <h1 class="font-display text-4xl lg:text-5xl font-medium text-charcoal leading-snug tracking-[-0.02em] mb-4">
+        Page Not Found
+      </h1>
+      <p class="text-lg text-midgray max-w-md mx-auto mb-10 leading-relaxed">
+        The page you requested doesn't exist or has been moved.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button href="/" variant="primary">Return to Homepage</Button>
+        <Button href="/contact" variant="secondary">Contact Us</Button>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PracticeCard from '../../components/sections/PracticeCard.astro';
+
+const practices = (await getCollection('practice-areas')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<BaseLayout
+  title="Practice Areas | Stream Kim Hicks Wrage & Alfaro, P.C."
+  description="Stream Kim represents institutions in their highest-stakes disputes across nine practice areas in Riverside and throughout California."
+>
+  <div class="bg-bone py-20 lg:py-28">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <header class="mb-12">
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brass mb-4">
+          The Firm
+        </p>
+        <h1 class="font-display text-4xl lg:text-5xl font-medium text-charcoal leading-snug tracking-[-0.02em]">
+          Practice Areas
+        </h1>
+        <p class="mt-4 text-lg text-midgray max-w-2xl leading-relaxed">
+          Stream Kim represents institutions in their highest-stakes disputes across nine
+          practice areas in Riverside and throughout California.
+        </p>
+      </header>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {practices.map((practice) => (
+          <div class="min-h-[220px] flex">
+            <PracticeCard
+              name={practice.data.name}
+              slug={practice.id}
+              tagline={practice.data.tagline}
+            />
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>

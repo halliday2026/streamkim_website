@@ -13,6 +13,9 @@ tags:
   - placeholder-practice-1
   - placeholder-practice-2
 order: 1
+attorneys:
+  - placeholder-attorney-1
+  - placeholder-attorney-2
 ---
 
 [PLACEHOLDER — Optional extended description of the matter for display contexts where

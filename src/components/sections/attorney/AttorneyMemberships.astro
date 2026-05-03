@@ -1,0 +1,28 @@
+---
+export interface AttorneyMembershipsProps {
+  memberships: string[];
+}
+
+const { memberships } = Astro.props as AttorneyMembershipsProps;
+---
+
+{memberships.length > 0 && (
+  <section aria-labelledby="memberships-heading" class="bg-bone py-12 lg:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="memberships-heading"
+        class="font-display text-2xl font-medium text-charcoal leading-snug tracking-[-0.01em] mb-6"
+      >
+        Professional &amp; Community
+      </h2>
+      <ul class="space-y-2">
+        {memberships.map((membership) => (
+          <li class="flex items-start gap-3 text-sm text-charcoal leading-relaxed">
+            <span class="mt-1 shrink-0 text-bordeaux font-semibold" aria-hidden="true">·</span>
+            {membership}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

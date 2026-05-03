@@ -1,6 +1,8 @@
 ---
 title: "[PLACEHOLDER — Short descriptive title without any client name]"
 practiceArea: placeholder-practice-2
+attorneys:
+  - placeholder-attorney-1
 description: >
   [PLACEHOLDER — 2–4 sentences. Ethics-compliant framing per CRPC 7.1–7.5. No client
   identification unless explicitly authorized. Describe the nature of the matter, the
