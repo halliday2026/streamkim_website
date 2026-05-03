@@ -24,6 +24,8 @@ const siteTitle =
   title === 'Stream Kim Hicks Wrage & Alfaro, P.C.'
     ? title
     : `${title} | Stream Kim Hicks Wrage & Alfaro, P.C.`;
+
+const isStaging = import.meta.env.SITE?.includes('github.io') || false;
 ---
 
 <!doctype html>
@@ -37,6 +39,7 @@ const siteTitle =
     <title>{siteTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    {isStaging && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />
