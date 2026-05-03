@@ -25,7 +25,7 @@ const siteTitle =
     ? title
     : `${title} | Stream Kim Hicks Wrage & Alfaro, P.C.`;
 
-const isStaging = import.meta.env.SITE?.includes('github.io') || false;
+const isStaging = Astro.site?.href?.includes('github.io') ?? false;
 ---
 
 <!doctype html>

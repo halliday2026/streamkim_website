@@ -271,3 +271,13 @@ Before each session: read `CLAUDE.md` (root), then the relevant spec in `docs/`.
 - 301 redirect map implemented for any old URLs
 - Google Analytics 4 tag installed (requires client GA property ID)
 - Google Search Console verified
+
+---
+
+## Pre-Launch Checklist
+
+Steps to complete before flipping from staging to production deployment.
+
+- Set `PLACEHOLDER_CHECK_MODE = 'fail'` in `scripts/check-placeholders.mjs`. Run `npm run build` to confirm zero placeholder strings reach `dist/`.
+- Remove or update the `SITE` / `BASE` env vars in the GitHub Actions workflow if moving to a custom domain.
+- Confirm `<meta name="robots" content="noindex, nofollow">` is absent from `dist/index.html` after updating the production domain (it auto-removes when `Astro.site` no longer contains `github.io`).
