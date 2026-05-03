@@ -2,14 +2,14 @@
 
 /* ─── Brand Theme ──────────────────────────────────────────────────────────── */
 /* Tailwind v4 uses CSS @theme — no tailwind.config.mjs needed.                */
-/* Usage: bg-navy, text-oxblood, border-midgray, etc.                          */
+/* Usage: bg-charcoal, text-bordeaux, bg-bone, text-brass, etc.                */
 
 @theme {
-  --color-navy: #1F2A44;
-  --color-oxblood: #8B0000;
-  --color-offwhite: #FAF8F5;
+  --color-charcoal: #1A1A1A;
+  --color-bordeaux: #6B0F1A;
+  --color-brass: #C4A572;
+  --color-bone: #FAF7F2;
   --color-midgray: #6B7280;
-  --color-charcoal: #222222;
 
   /* Font families */
   --font-display: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, serif;
@@ -26,7 +26,7 @@
   }
 
   body {
-    background-color: var(--color-offwhite);
+    background-color: var(--color-bone);
     color: var(--color-charcoal);
   }
 
@@ -37,6 +37,7 @@
   h5,
   h6 {
     font-family: var(--font-display);
+    font-weight: 500;
     line-height: 1.2;
     letter-spacing: -0.01em;
   }
@@ -50,19 +51,19 @@
   }
 
   a {
-    color: var(--color-oxblood);
+    color: var(--color-bordeaux);
   }
 
   /* Visible keyboard focus ring — WCAG 2.4.7 */
   :focus-visible {
-    outline: 2px solid var(--color-navy);
+    outline: 2px solid var(--color-charcoal);
     outline-offset: 3px;
   }
 
   /* Override focus ring on dark backgrounds */
-  .bg-navy :focus-visible,
+  .bg-charcoal :focus-visible,
   [data-bg="dark"] :focus-visible {
-    outline-color: var(--color-offwhite);
+    outline-color: var(--color-bone);
   }
 
   /* Respect reduced-motion preference */

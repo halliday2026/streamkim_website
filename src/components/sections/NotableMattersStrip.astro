@@ -16,11 +16,11 @@ const { matters, viewAllHref } = Astro.props as NotableMattersStripProps;
 ---
 
 {matters.length > 0 && (
-  <section aria-labelledby="matters-heading" class="py-16 lg:py-20 bg-navy">
+  <section aria-labelledby="matters-heading" class="py-16 lg:py-20 bg-charcoal">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
         id="matters-heading"
-        class="font-display text-3xl lg:text-4xl font-normal text-white leading-snug tracking-[-0.01em] mb-10"
+        class="font-display text-3xl lg:text-4xl font-medium text-white leading-snug tracking-[-0.01em] mb-10"
       >
         Representative Matters
       </h2>
@@ -38,7 +38,7 @@ const { matters, viewAllHref } = Astro.props as NotableMattersStripProps;
         <Link
           href={viewAllHref}
           variant="nav"
-          class="text-offwhite/80 hover:text-white"
+          class="text-bone/80 hover:text-white"
         >
           View all representative matters →
         </Link>

@@ -2,6 +2,7 @@
 import '@fontsource-variable/source-serif-4';
 import '@fontsource-variable/inter';
 import '../styles/global.css';
+import Header from '../components/layout/Header.astro';
 
 interface Props {
   title?: string;
@@ -59,16 +60,16 @@ const siteTitle =
     <slot name="head" />
   </head>
 
-  <body class="bg-offwhite text-charcoal antialiased">
+  <body class="bg-bone text-charcoal antialiased">
     <!-- Skip to main content (first focusable element — accessibility requirement) -->
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-navy focus:px-4 focus:py-2 focus:text-white focus:outline-none"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-charcoal focus:px-4 focus:py-2 focus:text-white focus:outline-none"
     >
       Skip to main content
     </a>
 
-    <slot name="header" />
+    <Header />
 
     <main id="main-content" tabindex="-1">
       <slot />

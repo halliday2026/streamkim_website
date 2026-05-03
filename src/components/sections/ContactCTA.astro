@@ -17,17 +17,17 @@ const { heading, subhead, formAction, practiceOptions, id } =
 <section
   aria-labelledby="contact-heading"
   id={id}
-  class="py-16 lg:py-20 bg-navy"
+  class="py-16 lg:py-20 bg-charcoal"
 >
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2
       id="contact-heading"
-      class="font-display text-3xl lg:text-4xl font-normal text-white leading-snug tracking-[-0.01em] mb-4"
+      class="font-display text-3xl lg:text-4xl font-medium text-white leading-snug tracking-[-0.01em] mb-4"
     >
       {heading}
     </h2>
     {subhead && (
-      <p class="text-offwhite/80 text-lg mb-10">{subhead}</p>
+      <p class="text-bone/80 text-lg mb-10">{subhead}</p>
     )}
 
     <!-- TODO: Wire formAction to Formspree or Web3Forms endpoint before launch -->
@@ -76,7 +76,7 @@ const { heading, subhead, formAction, practiceOptions, id } =
         <select
           id="contact-practice"
           name="practice_area"
-          class="block w-full border border-gray-300 px-3 py-2 text-base text-charcoal bg-white focus:outline-none focus:ring-2 focus:ring-navy focus:border-navy transition-colors duration-150"
+          class="block w-full border border-gray-300 px-3 py-2 text-base text-charcoal bg-white focus:outline-none focus:ring-2 focus:ring-charcoal focus:border-charcoal transition-colors duration-150"
         >
           <option value="">Select a practice area (optional)</option>
           {practiceOptions.map((p) => (
@@ -96,13 +96,13 @@ const { heading, subhead, formAction, practiceOptions, id } =
         placeholder="Describe your legal matter in a few sentences."
       />
 
-      <Button type="submit" variant="secondary" class="w-full sm:w-auto">
+      <Button type="submit" variant="primary-inverse" class="w-full sm:w-auto">
         Schedule a Consultation
       </Button>
     </form>
 
     <!-- Ethical disclaimer — required per CRPC 7.1. Not inside the form. -->
-    <p class="mt-6 text-xs text-offwhite/60 leading-relaxed">
+    <p class="mt-6 text-xs text-bone/60 leading-relaxed">
       Submission of this form does not create an attorney-client relationship.
       The information on this website is for general informational purposes only
       and does not constitute legal advice.

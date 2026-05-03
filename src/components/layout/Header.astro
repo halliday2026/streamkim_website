@@ -1,0 +1,55 @@
+---
+// Stub Header — full implementation (mega-menu, mobile drawer, active states) in a later session.
+// TODO: Session #6 — wire mobile hamburger menu, add mega-menu for Practice Areas, active nav state.
+import Button from '../ui/Button.astro';
+import Link from '../ui/Link.astro';
+---
+
+<header role="banner" class="sticky top-0 z-50 bg-bone border-b border-charcoal/10">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="h-16 flex items-center justify-between gap-8">
+
+      <!-- Logo (text-only until SVG mark is provided) -->
+      <a
+        href="/"
+        class="font-display text-xl font-medium text-charcoal tracking-[-0.01em] shrink-0
+               hover:text-charcoal/80 focus-visible:outline-2 focus-visible:outline-charcoal focus-visible:outline-offset-2"
+      >
+        Stream Kim
+      </a>
+
+      <!-- Desktop nav -->
+      <nav aria-label="Primary navigation" class="hidden lg:flex items-center gap-7">
+        <Link href="/firm" variant="nav">Firm</Link>
+        <Link href="/attorneys" variant="nav">Attorneys</Link>
+        <Link href="/practice-areas" variant="nav">Practice Areas</Link>
+        <Link href="/insights" variant="nav">Insights</Link>
+        <Link href="/notable-matters" variant="nav">Notable Matters</Link>
+        <Link href="/contact" variant="nav">Contact</Link>
+      </nav>
+
+      <!-- Right cluster -->
+      <div class="flex items-center gap-4 shrink-0">
+        <Button href="/contact" variant="primary" size="sm" class="hidden lg:inline-flex">
+          Schedule Consultation
+        </Button>
+
+        <!-- Mobile hamburger (stub — no menu logic) -->
+        <button
+          type="button"
+          aria-label="Open navigation menu"
+          class="lg:hidden inline-flex items-center justify-center w-10 h-10 text-charcoal
+                 hover:text-charcoal/70 focus-visible:outline-2 focus-visible:outline-charcoal focus-visible:outline-offset-2"
+        >
+          <!-- Three-line hamburger icon -->
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="none" aria-hidden="true">
+            <rect width="20" height="2" rx="1" fill="currentColor"/>
+            <rect y="6" width="20" height="2" rx="1" fill="currentColor"/>
+            <rect y="12" width="20" height="2" rx="1" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</header>

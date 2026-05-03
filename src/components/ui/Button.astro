@@ -1,6 +1,7 @@
 ---
 export interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'primary-inverse' | 'ghost-inverse';
+  size?: 'default' | 'sm';
   href?: string;
   type?: 'button' | 'submit';
   disabled?: boolean;
@@ -10,6 +11,7 @@ export interface ButtonProps {
 
 const {
   variant = 'primary',
+  size = 'default',
   href,
   type = 'button',
   disabled = false,
@@ -19,41 +21,68 @@ const {
 
 // All classes written as complete literals so Tailwind v4 can scan them.
 const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
+  // Light-background variants
   primary: [
     'inline-flex items-center justify-center',
-    'bg-navy text-white',
-    'px-6 py-3 min-h-[44px]',
+    'bg-charcoal text-white',
     'text-sm font-semibold tracking-wide uppercase',
     'transition-colors duration-150 cursor-pointer select-none',
-    'hover:bg-[#162035]',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2',
+    'hover:bg-[#0d0d0d]',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-charcoal focus-visible:ring-offset-2',
     'disabled:opacity-50 disabled:cursor-not-allowed',
   ].join(' '),
 
   secondary: [
     'inline-flex items-center justify-center',
-    'border-2 border-navy text-navy bg-transparent',
-    'px-6 py-3 min-h-[44px]',
+    'border-2 border-charcoal text-charcoal bg-transparent',
     'text-sm font-semibold',
     'transition-colors duration-150 cursor-pointer select-none',
-    'hover:bg-navy hover:text-white',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2',
+    'hover:bg-charcoal hover:text-white',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-charcoal focus-visible:ring-offset-2',
     'disabled:opacity-50 disabled:cursor-not-allowed',
   ].join(' '),
 
   ghost: [
     'inline-flex items-center justify-center',
-    'text-oxblood bg-transparent',
-    'px-4 py-2 min-h-[44px]',
+    'text-bordeaux bg-transparent',
     'text-sm font-medium underline-offset-4',
     'cursor-pointer select-none',
     'hover:underline',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-oxblood focus-visible:ring-offset-2',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bordeaux focus-visible:ring-offset-2',
+    'disabled:opacity-40 disabled:cursor-not-allowed',
+  ].join(' '),
+
+  // Dark-background variants (hero, charcoal sections)
+  'primary-inverse': [
+    'inline-flex items-center justify-center',
+    'bg-bone text-charcoal',
+    'text-sm font-semibold tracking-wide uppercase',
+    'transition-colors duration-150 cursor-pointer select-none',
+    'hover:bg-[#e8e3db]',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bone focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal',
+    'disabled:opacity-50 disabled:cursor-not-allowed',
+  ].join(' '),
+
+  'ghost-inverse': [
+    'inline-flex items-center justify-center',
+    'text-bone/90 bg-transparent',
+    'text-sm font-medium underline-offset-4',
+    'cursor-pointer select-none',
+    'hover:underline hover:text-bone',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bone/60 focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal',
     'disabled:opacity-40 disabled:cursor-not-allowed',
   ].join(' '),
 };
 
-const classes = [variantClasses[variant], extraClass].filter(Boolean).join(' ');
+// Size classes — min-h-[44px] is the project floor for all sizes (WCAG target)
+const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
+  default: 'px-6 py-3 min-h-[44px]',
+  sm: 'px-4 py-2 min-h-[44px]',
+};
+
+const classes = [variantClasses[variant], sizeClasses[size], extraClass]
+  .filter(Boolean)
+  .join(' ');
 
 // When disabled and rendering as a link, use <span aria-disabled> —
 // anchor elements cannot be truly disabled.

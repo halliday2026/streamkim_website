@@ -1,4 +1,6 @@
 ---
+// Photo: Jim Witkowski (@jcw) — https://unsplash.com/photos/aFF_Tr-TyJE
+// Mission Inn, Riverside, California. Free under the Unsplash License.
 import Button from '../ui/Button.astro';
 
 export interface HeroProps {
@@ -11,28 +13,79 @@ export interface HeroProps {
 const { headline, subhead, primaryCta, secondaryPhone } = Astro.props as HeroProps;
 ---
 
-<section aria-labelledby="hero-headline" class="bg-offwhite py-24 lg:py-32">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl">
-      <h1
-        id="hero-headline"
-        class="font-display text-5xl lg:text-6xl font-normal leading-tight tracking-[-0.02em] text-navy"
-      >
-        {headline}
-      </h1>
+<section aria-labelledby="hero-headline" class="relative min-h-[80vh] lg:min-h-[90vh] flex items-center">
 
-      <p class="mt-6 text-lg lg:text-xl text-midgray leading-relaxed max-w-2xl">
-        {subhead}
-      </p>
+  <!-- Architectural background — Mission Inn, Riverside CA -->
+  <!-- alt="" intentional: purely decorative; content conveyed via headline text -->
+  <img
+    src={`${import.meta.env.BASE_URL}hero/riverside-hero.jpg`}
+    alt=""
+    class="absolute inset-0 w-full h-full object-cover object-[center_35%]"
+    loading="eager"
+    fetchpriority="high"
+  />
 
-      <div class="mt-10 flex flex-col sm:flex-row gap-4">
-        <Button href={primaryCta.href} variant="primary">
-          {primaryCta.label}
-        </Button>
-        <Button href={`tel:${secondaryPhone.replace(/\D/g, '')}`} variant="ghost">
-          {secondaryPhone}
-        </Button>
-      </div>
+  <!-- Charcoal overlay — warm tones bleed through at the edges -->
+  <div class="absolute inset-0 bg-charcoal/80" aria-hidden="true"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
+
+    <p class="anim-eyebrow text-xs font-semibold uppercase tracking-[0.25em] text-brass mb-6">
+      Riverside · Civil Litigation
+    </p>
+
+    <h1
+      id="hero-headline"
+      class="anim-headline font-display text-5xl lg:text-7xl font-medium leading-[1.05] tracking-[-0.02em] text-bone max-w-3xl"
+    >
+      {headline}
+    </h1>
+
+    <p class="anim-subhead mt-6 text-lg lg:text-xl leading-relaxed text-bone/80 max-w-2xl">
+      {subhead}
+    </p>
+
+    <div class="anim-ctas mt-10 flex flex-col sm:flex-row gap-4">
+      <Button href={primaryCta.href} variant="primary-inverse">
+        {primaryCta.label}
+      </Button>
+      <Button href={`tel:${secondaryPhone.replace(/\D/g, '')}`} variant="ghost-inverse">
+        {secondaryPhone}
+      </Button>
     </div>
+
   </div>
 </section>
+
+<style>
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .anim-eyebrow  { animation: fadeIn  200ms ease-out   0ms both; }
+  .anim-headline { animation: fadeUp  400ms ease-out 150ms both; }
+  .anim-subhead  { animation: fadeIn  300ms ease-out 350ms both; }
+  .anim-ctas     { animation: fadeIn  200ms ease-out 500ms both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anim-eyebrow,
+    .anim-headline,
+    .anim-subhead,
+    .anim-ctas {
+      animation: none;
+    }
+  }
+</style>

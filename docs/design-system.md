@@ -9,15 +9,16 @@
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `navy` | `#1F2A44` | Primary brand — headings, nav background, CTA buttons |
-| `oxblood` | `#8B0000` | Accent — links, key CTAs, active states, the Redbird mark |
-| `offwhite` | `#FAF8F5` | Page background, card backgrounds |
+| `charcoal` | `#1A1A1A` | Primary — headings, dark backgrounds, CTA buttons |
+| `bordeaux` | `#6B0F1A` | Accent — links, key CTAs, eyebrow labels |
+| `brass` | `#C4A572` | Rare accent — hairline dividers, ornamental moments only |
+| `bone` | `#FAF7F2` | Page background, card backgrounds |
 | `midgray` | `#6B7280` | Body text secondary, meta text, captions |
-| `charcoal` | `#222222` | Primary body text |
 | `white` | `#FFFFFF` | Text on dark backgrounds, reversed components |
 
 **Avoid:** Bright blues, gradients, drop shadows, glassmorphism, any palette that signals "modern
-SaaS" over "serious institution."
+SaaS" over "serious institution." `brass` is for hairlines and small ornamental accents only —
+never use it for large blocks.
 
 ### Tailwind v4 @theme snippet
 
@@ -25,15 +26,15 @@ Add to `src/styles/global.css` inside the `@theme` block:
 
 ```css
 @theme {
-  --color-navy: #1F2A44;
-  --color-oxblood: #8B0000;
-  --color-offwhite: #FAF8F5;
+  --color-charcoal: #1A1A1A;
+  --color-bordeaux: #6B0F1A;
+  --color-brass: #C4A572;
+  --color-bone: #FAF7F2;
   --color-midgray: #6B7280;
-  --color-charcoal: #222222;
 }
 ```
 
-Usage in markup: `bg-navy`, `text-oxblood`, `border-midgray`, etc.
+Usage in markup: `bg-charcoal`, `text-bordeaux`, `bg-bone`, `text-brass`, etc.
 
 ---
 
@@ -67,6 +68,7 @@ privacy concerns, works offline.
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, serif;
+    font-weight: 500;
   }
 }
 ```
@@ -75,14 +77,14 @@ privacy concerns, works offline.
 
 | Element | Size | Weight | Line-height | Letter-spacing |
 |---------|------|--------|-------------|----------------|
-| Display H1 | `text-5xl` / `text-6xl` (lg) | 400 (regular) | `leading-tight` | `-0.02em` |
-| H2 | `text-3xl` / `text-4xl` (lg) | 400 | `leading-snug` | `-0.01em` |
-| H3 | `text-2xl` | 500 | `leading-snug` | `0` |
-| H4 | `text-xl` | 600 | `leading-normal` | `0` |
+| Display H1 | `text-5xl` / `text-7xl` (hero) | 500 (medium) | `leading-[1.05]` | `-0.02em` |
+| H2 (section) | `text-3xl` / `text-4xl` (lg) | 500 (medium) | `leading-snug` | `-0.01em` |
+| H3 (card) | `text-xl` | 500 (medium) | `leading-snug` | `0` |
 | Body large | `text-lg` | 400 | `leading-relaxed` | `0` |
 | Body default | `text-base` | 400 | `leading-relaxed` | `0` |
 | Small / meta | `text-sm` | 400 | `leading-normal` | `0.01em` |
 | Label / caps | `text-xs` | 600 | `leading-normal` | `0.08em` uppercase |
+| Eyebrow | `text-xs` | 600 | — | `0.25em` uppercase (`tracking-[0.25em]`) |
 
 ---
 
@@ -90,8 +92,10 @@ privacy concerns, works offline.
 
 Use Tailwind's default spacing scale (4px base). Document deviations here as they arise.
 
-Standard section vertical padding: `py-16` (64px) desktop, `py-10` (40px) mobile.
+Standard section vertical padding: `py-16 lg:py-20`. Hero: `min-h-[80vh] lg:min-h-[90vh]`.
 Standard container max-width: `max-w-6xl` (72rem) with `mx-auto px-4 sm:px-6 lg:px-8`.
+
+SectionDivider adds `py-8` (2rem each side) between sections.
 
 ---
 
@@ -115,49 +119,68 @@ Tailwind v4 defaults:
 
 ### Button
 
-Three variants. All must have visible focus ring (`ring-2 ring-offset-2`) and 44×44px minimum
-touch target (WCAG 2.5.5).
+Five variants. All must have visible focus ring and `min-h-[44px]` (project accessibility floor).
+Two size options: `default` (px-6 py-3) and `sm` (px-4 py-2, for header use).
 
-#### Primary
+#### Primary (light backgrounds)
 
 ```
-bg-navy text-white px-6 py-3 text-sm font-semibold tracking-wide uppercase
-hover: bg-[#162035]
-focus-visible: ring-2 ring-navy ring-offset-2
+bg-charcoal text-white px-6 py-3 min-h-[44px] text-sm font-semibold tracking-wide uppercase
+hover: bg-[#0d0d0d]
+focus-visible: ring-2 ring-charcoal ring-offset-2
 disabled: opacity-50 cursor-not-allowed
 ```
 
-#### Secondary (outlined)
+#### Secondary (light backgrounds)
 
 ```
-border-2 border-navy text-navy bg-transparent px-6 py-3 text-sm font-semibold
-hover: bg-navy text-white
-focus-visible: ring-2 ring-navy ring-offset-2
+border-2 border-charcoal text-charcoal bg-transparent px-6 py-3 min-h-[44px] text-sm font-semibold
+hover: bg-charcoal text-white
+focus-visible: ring-2 ring-charcoal ring-offset-2
 disabled: opacity-50 cursor-not-allowed
 ```
 
-#### Ghost
+#### Ghost (light backgrounds)
 
 ```
-text-oxblood bg-transparent px-4 py-2 text-sm font-medium underline-offset-4
+text-bordeaux bg-transparent px-4 py-2 min-h-[44px] text-sm font-medium underline-offset-4
 hover: underline
-focus-visible: ring-2 ring-oxblood ring-offset-2
+focus-visible: ring-2 ring-bordeaux ring-offset-2
+disabled: opacity-40 cursor-not-allowed
+```
+
+#### Primary Inverse (dark/image backgrounds — hero, charcoal sections)
+
+```
+bg-bone text-charcoal px-6 py-3 min-h-[44px] text-sm font-semibold tracking-wide uppercase
+hover: bg-[#e8e3db]
+focus-visible: ring-2 ring-bone ring-offset-2 ring-offset-charcoal
+disabled: opacity-50 cursor-not-allowed
+```
+
+#### Ghost Inverse (dark/image backgrounds)
+
+```
+text-bone/90 bg-transparent px-4 py-2 min-h-[44px] text-sm font-medium underline-offset-4
+hover: underline text-bone
+focus-visible: ring-2 ring-bone/60 ring-offset-2 ring-offset-charcoal
 disabled: opacity-40 cursor-not-allowed
 ```
 
 **Accessibility:** Always set `type="button"` unless it's a submit. Use `<a>` for navigation,
-`<button>` for actions.
+`<button>` for actions. Disabled links render as `<span aria-disabled="true">`.
 
 ---
 
 ### Link
 
 ```
-text-oxblood underline-offset-4 hover:underline
-focus-visible: outline-2 outline-oxblood outline-offset-2
+text-bordeaux underline underline-offset-4   (body variant)
+hover: text-[#4a0812]
+focus-visible: outline-2 outline-bordeaux outline-offset-2
 ```
 
-For navigation links (not body copy): no underline by default, underline on hover.
+Nav variant (menus): no underline by default, underline on hover, `text-charcoal`.
 
 ---
 
@@ -168,15 +191,8 @@ No drop shadows — use border instead.
 
 ```
 bg-white border border-gray-200 p-6
-hover: border-navy transition-colors duration-150
+hover: border-charcoal transition-colors duration-150
 ```
-
-**Attorney Card variant:** portrait image at top, `aspect-[3/4]` or `aspect-square`, name as H3,
-title as small-caps label, practice areas as comma-separated links.
-
-**Practice Card variant:** no image, practice name as H3, one-line tagline, arrow-link to page.
-
-**Insight Card variant:** publication date + practice tag above title, excerpt below, author byline.
 
 ---
 
@@ -184,25 +200,34 @@ title as small-caps label, practice areas as comma-separated links.
 
 ```html
 <label class="block text-sm font-medium text-charcoal mb-1" for="field-id">
-  Label text <span aria-hidden="true" class="text-oxblood">*</span>
+  Label text <span aria-hidden="true" class="text-bordeaux">*</span>
   <span class="sr-only">(required)</span>
 </label>
 <input
   id="field-id"
   class="block w-full border border-gray-300 px-3 py-2 text-base
-         focus:border-navy focus:ring-2 focus:ring-navy focus:outline-none
-         aria-invalid:border-red-600 aria-invalid:ring-red-600"
+         focus:border-charcoal focus:ring-2 focus:ring-charcoal focus:outline-none"
   aria-describedby="field-id-error"
 />
-<p id="field-id-error" role="alert" class="mt-1 text-sm text-red-700 hidden">
+<p id="field-id-error" role="alert" class="mt-1 text-sm text-red-700">
   Error message
 </p>
 ```
 
-**States:** default, focus (navy ring), error (`aria-invalid="true"`, red border/ring), disabled
+**States:** default, focus (charcoal ring), error (`aria-invalid="true"`, red border/ring), disabled
 (50% opacity, `cursor-not-allowed`).
 
-**Required fields:** mark with `required` attribute + visible asterisk + SR-only "(required)" text.
+---
+
+### SectionDivider
+
+Ornamental brass hairline rendered between homepage sections. No props.
+
+```html
+<div role="presentation" aria-hidden="true" class="flex justify-center py-8">
+  <div class="h-px w-32 bg-brass"></div>
+</div>
+```
 
 ---
 
@@ -211,4 +236,5 @@ title as small-caps label, practice areas as comma-separated links.
 - **Use:** Original attorney portraits (neutral backdrop, natural light), Riverside architectural shots
 - **Never use:** Stock photos of gavels, scales, handshakes, marble columns, generic suits
 - **Treatment:** Black-and-white attorney portraits are acceptable and suit the editorial register
-- **Alt text:** Every attorney portrait must have descriptive alt text; decorative texture shots use `alt=""`
+- **Alt text:** Every attorney portrait must have descriptive alt text; decorative images (hero background) use `alt=""`
+- **Hero image:** Photo by Jim Witkowski (@jcw), Mission Inn Riverside CA — https://unsplash.com/photos/aFF_Tr-TyJE. Free under Unsplash License. Replace with commissioned photography when available.

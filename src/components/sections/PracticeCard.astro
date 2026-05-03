@@ -8,8 +8,8 @@ export interface PracticeCardProps {
 const { name, slug, tagline } = Astro.props as PracticeCardProps;
 ---
 
-<article class="bg-white border border-gray-200 p-6 hover:border-navy transition-colors duration-150 flex flex-col">
-  <h3 class="font-display text-xl font-normal text-navy">
+<article class="bg-white border border-gray-200 p-6 hover:border-charcoal transition-colors duration-150 flex flex-col">
+  <h3 class="font-display text-xl font-medium text-charcoal">
     {name}
   </h3>
   <p class="mt-2 text-sm text-midgray leading-relaxed flex-1">
@@ -17,7 +17,7 @@ const { name, slug, tagline } = Astro.props as PracticeCardProps;
   </p>
   <a
     href={`/practice-areas/${slug}`}
-    class="mt-4 inline-flex items-center text-sm font-medium text-oxblood hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-oxblood focus-visible:outline-offset-2"
+    class="mt-4 inline-flex items-center text-sm font-medium text-bordeaux hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-bordeaux focus-visible:outline-offset-2"
   >
     Learn more →
     <span class="sr-only"> about {name}</span>

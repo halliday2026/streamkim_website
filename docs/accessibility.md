@@ -10,17 +10,17 @@ This is not optional.
 
 | Use | Minimum ratio | Tailwind check |
 |-----|--------------|----------------|
-| Normal body text (< 18pt / < 14pt bold) | 4.5:1 | `text-charcoal` (#222) on `bg-offwhite` (#FAF8F5) = ~15:1 ✓ |
+| Normal body text (< 18pt / < 14pt bold) | 4.5:1 | `text-charcoal` (#1A1A1A) on `bg-bone` (#FAF7F2) = ~18:1 ✓ |
 | Large text (≥ 18pt or ≥ 14pt bold) | 3:1 | All display headings must meet 3:1 minimum |
-| UI components (buttons, inputs, focus rings) | 3:1 | `navy` (#1F2A44) on `offwhite` = ~10:1 ✓ |
+| UI components (buttons, inputs, focus rings) | 3:1 | `charcoal` (#1A1A1A) on `bone` = ~18:1 ✓ |
 | Placeholder text in inputs | 4.5:1 | Use `midgray` (#6B7280) on white — check this; may need darker value |
 | Disabled state | No requirement | Still aim for 3:1 for usability |
 
 **Check before shipping:** Run every unique text/background combination through
 [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/) or axe DevTools.
 
-Dark backgrounds (`bg-navy`): Use `text-white` or `text-offwhite`. Verify at 4.5:1.
-`oxblood` (#8B0000) on `offwhite`: ~7.2:1 ✓
+Dark backgrounds (`bg-charcoal`): Use `text-white` or `text-bone`. Verify at 4.5:1.
+`bordeaux` (#6B0F1A) on `bone` (#FAF7F2): ~12:1 ✓
 
 ---
 
@@ -37,13 +37,13 @@ Apply globally in `global.css`:
 ```css
 @layer base {
   :focus-visible {
-    outline: 2px solid #1F2A44;  /* navy */
+    outline: 2px solid #1A1A1A;  /* charcoal */
     outline-offset: 3px;
   }
   /* Override for dark backgrounds */
-  .bg-navy :focus-visible,
-  [data-theme="dark"] :focus-visible {
-    outline-color: #FAF8F5;
+  .bg-charcoal :focus-visible,
+  [data-bg="dark"] :focus-visible {
+    outline-color: #FAF7F2;  /* bone */
   }
 }
 ```

@@ -19,11 +19,11 @@ const mapsQuery = encodeURIComponent(
 );
 ---
 
-<section aria-labelledby="location-heading" class="py-16 lg:py-20 bg-offwhite">
+<section aria-labelledby="location-heading" class="py-16 lg:py-20 bg-bone">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2
       id="location-heading"
-      class="font-display text-3xl lg:text-4xl font-normal text-navy leading-snug tracking-[-0.01em] mb-10"
+      class="font-display text-3xl lg:text-4xl font-medium text-charcoal leading-snug tracking-[-0.01em] mb-10"
     >
       Riverside, California
     </h2>
@@ -40,7 +40,7 @@ const mapsQuery = encodeURIComponent(
           <p class="mt-3">
             <a
               href={`tel:${phone.replace(/\D/g, '')}`}
-              class="text-oxblood hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-oxblood focus-visible:outline-offset-2"
+              class="text-bordeaux hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-bordeaux focus-visible:outline-offset-2"
             >
               {phone}
             </a>
@@ -63,7 +63,7 @@ const mapsQuery = encodeURIComponent(
           href={`https://maps.google.com/?q=${mapsQuery}`}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-sm text-oxblood hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-oxblood focus-visible:outline-offset-2"
+          class="text-sm text-bordeaux hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-bordeaux focus-visible:outline-offset-2"
         >
           Open in Google Maps
           <span class="sr-only">(opens in a new tab)</span>

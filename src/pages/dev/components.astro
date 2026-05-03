@@ -9,12 +9,13 @@
  * During `astro dev` it is served normally at: http://localhost:4321/dev/components
  *
  * Use this page to manually verify every variant and state before
- * each session that touches Button, Link, or FormField.
+ * each session that touches Button, Link, FormField, or SectionDivider.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/ui/Button.astro';
 import Link from '../../components/ui/Link.astro';
 import FormField from '../../components/ui/FormField.astro';
+import SectionDivider from '../../components/ui/SectionDivider.astro';
 ---
 
 <BaseLayout title="Component Showcase — Dev Only">
@@ -26,6 +27,7 @@ import FormField from '../../components/ui/FormField.astro';
       <p class="mt-2 text-midgray">
         This page does not appear in production builds.
         Tab through all elements to verify keyboard navigation and focus rings.
+        Palette: charcoal / bordeaux / brass / bone.
       </p>
     </header>
 
@@ -34,53 +36,78 @@ import FormField from '../../components/ui/FormField.astro';
       <h2 id="btn-heading" class="text-2xl mb-1">Button</h2>
       <p class="text-sm text-midgray mb-8">
         Spec: <code>src/components/ui/Button.astro</code> ·
-        Three variants × two element types (button / anchor) × disabled state.
+        Five variants × two sizes × two element types (button / anchor) × disabled state.
       </p>
 
       <!-- Primary -->
-      <h3 class="text-lg font-semibold mb-4">Primary</h3>
+      <h3 class="text-lg font-medium mb-4">Primary (light backgrounds)</h3>
       <div class="flex flex-wrap gap-4 items-center mb-3">
         <Button variant="primary">Schedule a Consultation</Button>
-        <Button variant="primary" href="/contact">Schedule a Consultation (link)</Button>
+        <Button variant="primary" size="sm">Small (header)</Button>
+        <Button variant="primary" href="/contact">Schedule (link)</Button>
         <Button variant="primary" disabled>Disabled</Button>
         <Button variant="primary" href="/contact" disabled>Disabled link (span)</Button>
       </div>
       <ul class="text-sm text-midgray space-y-1 mb-10 pl-4">
-        <li>✓ Visual check: navy background, white text</li>
-        <li>✓ Visual check: hover darkens background to #162035</li>
-        <li>✓ Visual check: focus ring visible (2px navy) on Tab</li>
+        <li>✓ Visual check: charcoal background, white text</li>
+        <li>✓ Visual check: hover darkens to #0d0d0d</li>
+        <li>✓ Visual check: focus ring visible (2px charcoal) on Tab</li>
+        <li>✓ Visual check: sm variant: same min-height (44px), smaller horizontal padding</li>
         <li>✓ Visual check: disabled is 50% opacity, not clickable</li>
         <li>✓ Visual check: disabled link renders as &lt;span&gt;, not &lt;a&gt;</li>
       </ul>
 
       <!-- Secondary -->
-      <h3 class="text-lg font-semibold mb-4">Secondary</h3>
+      <h3 class="text-lg font-medium mb-4">Secondary (light backgrounds)</h3>
       <div class="flex flex-wrap gap-4 items-center mb-3">
         <Button variant="secondary">Learn More</Button>
         <Button variant="secondary" href="/attorneys">Learn More (link)</Button>
         <Button variant="secondary" disabled>Disabled</Button>
-        <Button variant="secondary" href="/attorneys" disabled>Disabled link</Button>
       </div>
       <ul class="text-sm text-midgray space-y-1 mb-10 pl-4">
-        <li>✓ Visual check: navy border, navy text, transparent background</li>
-        <li>✓ Visual check: hover fills navy background, text becomes white</li>
-        <li>✓ Visual check: focus ring visible (2px navy) on Tab</li>
-        <li>✓ Visual check: disabled is 50% opacity</li>
+        <li>✓ Visual check: charcoal border, charcoal text, transparent background</li>
+        <li>✓ Visual check: hover fills charcoal background, text becomes white</li>
+        <li>✓ Visual check: focus ring visible (2px charcoal) on Tab</li>
       </ul>
 
       <!-- Ghost -->
-      <h3 class="text-lg font-semibold mb-4">Ghost</h3>
+      <h3 class="text-lg font-medium mb-4">Ghost (light backgrounds)</h3>
       <div class="flex flex-wrap gap-4 items-center mb-3">
         <Button variant="ghost">View Practice Areas</Button>
         <Button variant="ghost" href="/practice-areas">View Practice Areas (link)</Button>
         <Button variant="ghost" disabled>Disabled</Button>
-        <Button variant="ghost" href="/practice-areas" disabled>Disabled link</Button>
+      </div>
+      <ul class="text-sm text-midgray space-y-1 mb-10 pl-4">
+        <li>✓ Visual check: bordeaux text, no border, no background</li>
+        <li>✓ Visual check: hover adds underline</li>
+        <li>✓ Visual check: focus ring visible (2px bordeaux) on Tab</li>
+        <li>✓ Visual check: disabled is 40% opacity</li>
+      </ul>
+
+      <!-- Primary Inverse -->
+      <h3 class="text-lg font-medium mb-4">Primary Inverse (dark backgrounds)</h3>
+      <div class="bg-charcoal p-6 rounded flex flex-wrap gap-4 items-center mb-3">
+        <Button variant="primary-inverse">Schedule a Consultation</Button>
+        <Button variant="primary-inverse" href="/contact">Schedule (link)</Button>
+        <Button variant="primary-inverse" disabled>Disabled</Button>
+      </div>
+      <ul class="text-sm text-midgray space-y-1 mb-10 pl-4">
+        <li>✓ Visual check: bone background, charcoal text — visible on dark section</li>
+        <li>✓ Visual check: hover slightly darkens bone</li>
+        <li>✓ Visual check: focus ring uses bone color (visible on charcoal bg)</li>
+      </ul>
+
+      <!-- Ghost Inverse -->
+      <h3 class="text-lg font-medium mb-4">Ghost Inverse (dark backgrounds)</h3>
+      <div class="bg-charcoal p-6 rounded flex flex-wrap gap-4 items-center mb-3">
+        <Button variant="ghost-inverse">(951) 555-0000</Button>
+        <Button variant="ghost-inverse" href="tel:+19515550000">(951) 555-0000 (link)</Button>
+        <Button variant="ghost-inverse" disabled>Disabled</Button>
       </div>
       <ul class="text-sm text-midgray space-y-1 pl-4">
-        <li>✓ Visual check: oxblood text, no border, no background</li>
-        <li>✓ Visual check: hover adds underline</li>
-        <li>✓ Visual check: focus ring visible (2px oxblood) on Tab</li>
-        <li>✓ Visual check: disabled is 40% opacity</li>
+        <li>✓ Visual check: bone/90 text on charcoal — legible and restrained</li>
+        <li>✓ Visual check: hover adds underline, text goes to full bone</li>
+        <li>✓ Visual check: focus ring uses bone/60 (subtle but visible)</li>
       </ul>
     </section>
 
@@ -92,7 +119,7 @@ import FormField from '../../components/ui/FormField.astro';
         Two variants + external link with security attributes.
       </p>
 
-      <h3 class="text-lg font-semibold mb-4">Body variant</h3>
+      <h3 class="text-lg font-medium mb-4">Body variant</h3>
       <p class="text-base mb-3">
         Stream Kim's attorneys appear in
         <Link href="/attorneys">Riverside Superior Court</Link>
@@ -101,12 +128,12 @@ import FormField from '../../components/ui/FormField.astro';
         on public entity defense.
       </p>
       <ul class="text-sm text-midgray space-y-1 mb-10 pl-4">
-        <li>✓ Visual check: oxblood color, underline always visible</li>
+        <li>✓ Visual check: bordeaux color, underline always visible</li>
         <li>✓ Visual check: hover darkens text slightly</li>
-        <li>✓ Visual check: focus outline visible (2px oxblood) on Tab</li>
+        <li>✓ Visual check: focus outline visible (2px bordeaux) on Tab</li>
       </ul>
 
-      <h3 class="text-lg font-semibold mb-4">Nav variant</h3>
+      <h3 class="text-lg font-medium mb-4">Nav variant</h3>
       <nav aria-label="Example nav links" class="flex gap-6 mb-3">
         <Link href="/firm" variant="nav">The Firm</Link>
         <Link href="/attorneys" variant="nav">Attorneys</Link>
@@ -115,11 +142,11 @@ import FormField from '../../components/ui/FormField.astro';
       </nav>
       <ul class="text-sm text-midgray space-y-1 mb-10 pl-4">
         <li>✓ Visual check: charcoal text, no underline by default</li>
-        <li>✓ Visual check: hover adds underline, text turns navy</li>
-        <li>✓ Visual check: focus outline visible (2px navy) on Tab</li>
+        <li>✓ Visual check: hover adds underline</li>
+        <li>✓ Visual check: focus outline visible (2px charcoal) on Tab</li>
       </ul>
 
-      <h3 class="text-lg font-semibold mb-4">External link</h3>
+      <h3 class="text-lg font-medium mb-4">External link</h3>
       <p class="text-base mb-3">
         View the firm's profile on
         <Link href="https://www.martindale.com" external>Martindale-Hubbell</Link>
@@ -130,6 +157,22 @@ import FormField from '../../components/ui/FormField.astro';
         <li>✓ Visual check: ↗ indicator rendered after link text</li>
         <li>✓ Visual check: "(opens in a new tab)" announced by screen reader (sr-only)</li>
         <li>✓ Inspect: rel="noopener noreferrer" and target="_blank" present</li>
+      </ul>
+    </section>
+
+    <!-- ─── SECTION DIVIDER ───────────────────────────────────────────────── -->
+    <section aria-labelledby="divider-heading">
+      <h2 id="divider-heading" class="text-2xl mb-1">SectionDivider</h2>
+      <p class="text-sm text-midgray mb-8">
+        Spec: <code>src/components/ui/SectionDivider.astro</code> ·
+        Ornamental brass hairline. No props. Aria-hidden.
+      </p>
+      <div class="border border-gray-100 rounded">
+        <SectionDivider />
+      </div>
+      <ul class="text-sm text-midgray space-y-1 mt-4 pl-4">
+        <li>✓ Visual check: brass (#C4A572) horizontal line, centered, 128px wide, 1px tall</li>
+        <li>✓ Inspect: role="presentation" aria-hidden="true" — screen readers skip it</li>
       </ul>
     </section>
 
@@ -144,7 +187,7 @@ import FormField from '../../components/ui/FormField.astro';
       <form class="space-y-6 max-w-lg" novalidate>
 
         <div>
-          <h3 class="text-lg font-semibold mb-4">Text — default (optional)</h3>
+          <h3 class="text-lg font-medium mb-4">Text — default (optional)</h3>
           <FormField
             id="name-optional"
             name="name_optional"
@@ -154,12 +197,12 @@ import FormField from '../../components/ui/FormField.astro';
           />
           <ul class="text-sm text-midgray space-y-1 mt-3 pl-4">
             <li>✓ Visual check: no asterisk, no error styling</li>
-            <li>✓ Visual check: focus ring (2px navy) on click/Tab</li>
+            <li>✓ Visual check: focus ring (2px charcoal) on click/Tab</li>
           </ul>
         </div>
 
         <div>
-          <h3 class="text-lg font-semibold mb-4">Text — required</h3>
+          <h3 class="text-lg font-medium mb-4">Text — required</h3>
           <FormField
             id="name-required"
             name="name_required"
@@ -169,14 +212,14 @@ import FormField from '../../components/ui/FormField.astro';
             required
           />
           <ul class="text-sm text-midgray space-y-1 mt-3 pl-4">
-            <li>✓ Visual check: oxblood asterisk visible after label</li>
+            <li>✓ Visual check: bordeaux asterisk visible after label</li>
             <li>✓ Inspect: input has required attribute</li>
             <li>✓ Screen reader: "(required)" announced after label text</li>
           </ul>
         </div>
 
         <div>
-          <h3 class="text-lg font-semibold mb-4">Email — required with help text</h3>
+          <h3 class="text-lg font-medium mb-4">Email — required with help text</h3>
           <FormField
             id="email-help"
             name="email_help"
@@ -193,7 +236,7 @@ import FormField from '../../components/ui/FormField.astro';
         </div>
 
         <div>
-          <h3 class="text-lg font-semibold mb-4">Text — error state</h3>
+          <h3 class="text-lg font-medium mb-4">Text — error state</h3>
           <FormField
             id="name-error"
             name="name_error"
@@ -213,7 +256,7 @@ import FormField from '../../components/ui/FormField.astro';
         </div>
 
         <div>
-          <h3 class="text-lg font-semibold mb-4">Tel — optional</h3>
+          <h3 class="text-lg font-medium mb-4">Tel — optional</h3>
           <FormField
             id="phone"
             name="phone"
@@ -224,7 +267,7 @@ import FormField from '../../components/ui/FormField.astro';
         </div>
 
         <div>
-          <h3 class="text-lg font-semibold mb-4">Textarea — required</h3>
+          <h3 class="text-lg font-medium mb-4">Textarea — required</h3>
           <FormField
             id="matter"
             name="matter"
@@ -237,7 +280,7 @@ import FormField from '../../components/ui/FormField.astro';
           <ul class="text-sm text-midgray space-y-1 mt-3 pl-4">
             <li>✓ Visual check: renders as textarea, not input</li>
             <li>✓ Visual check: 5 rows visible</li>
-            <li>✓ Visual check: asterisk present (required)</li>
+            <li>✓ Visual check: bordeaux asterisk present (required)</li>
           </ul>
         </div>
 

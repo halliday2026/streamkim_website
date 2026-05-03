@@ -8,6 +8,7 @@ import NotableMattersStrip from '../components/sections/NotableMattersStrip.astr
 import InsightsPreview from '../components/sections/InsightsPreview.astro';
 import GeographicPositioning from '../components/sections/GeographicPositioning.astro';
 import ContactCTA from '../components/sections/ContactCTA.astro';
+import SectionDivider from '../components/ui/SectionDivider.astro';
 
 // ── Practice areas — sorted by strategic priority (order field), NOT alphabetically ──
 const practiceAreas = (await getCollection('practice-areas')).sort(
@@ -85,22 +86,32 @@ const practiceOptions = practiceAreas.map((p) => ({
     secondaryPhone="[PLACEHOLDER — (951) 555-0000]"
   />
 
+  <SectionDivider />
+
   <PracticeGrid practices={practicesForGrid} />
+
+  <SectionDivider />
 
   <AttorneysPreview
     attorneys={attorneysForPreview}
     viewAllHref="/attorneys"
   />
 
+  <SectionDivider />
+
   <NotableMattersStrip
     matters={mattersForStrip}
     viewAllHref="/notable-matters"
   />
 
+  <SectionDivider />
+
   <InsightsPreview
     articles={insightsForPreview}
     viewAllHref="/insights"
   />
+
+  <SectionDivider />
 
   <GeographicPositioning
     tagline="Headquartered in Riverside, serving clients throughout the Inland Empire and across California."
@@ -112,6 +123,8 @@ const practiceOptions = practiceAreas.map((p) => ({
     }}
     phone="[PLACEHOLDER — (951) 555-0000]"
   />
+
+  <SectionDivider />
 
   <!--
     formAction placeholder — the postbuild guard catches this until the endpoint

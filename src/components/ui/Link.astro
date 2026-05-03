@@ -14,18 +14,18 @@ const {
 } = Astro.props as LinkProps;
 
 const variantClasses: Record<NonNullable<LinkProps['variant']>, string> = {
-  // Body: oxblood, underline always visible, strong focus outline
+  // Body: bordeaux, underline always visible, strong focus outline
   body: [
-    'text-oxblood underline underline-offset-4',
-    'hover:text-[#6b0000]',
-    'focus-visible:outline-2 focus-visible:outline-oxblood focus-visible:outline-offset-2',
+    'text-bordeaux underline underline-offset-4',
+    'hover:text-[#4a0812]',
+    'focus-visible:outline-2 focus-visible:outline-bordeaux focus-visible:outline-offset-2',
   ].join(' '),
 
   // Nav: no underline by default, underline on hover; used in menus
   nav: [
     'text-charcoal no-underline underline-offset-4',
-    'hover:underline hover:text-navy',
-    'focus-visible:outline-2 focus-visible:outline-navy focus-visible:outline-offset-2',
+    'hover:underline hover:text-charcoal',
+    'focus-visible:outline-2 focus-visible:outline-charcoal focus-visible:outline-offset-2',
   ].join(' '),
 };
 
