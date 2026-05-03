@@ -1,0 +1,71 @@
+---
+export interface Heading {
+  level: 2 | 3;
+  text: string;
+  id: string;
+}
+
+export interface ArticleToCProps {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props as ArticleToCProps;
+---
+
+{headings.length >= 2 && (
+  <nav aria-label="Table of contents" class="hidden lg:block sticky top-24">
+    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-midgray mb-4">
+      Contents
+    </p>
+    <ul class="space-y-1.5">
+      {headings.map((h) => (
+        <li class={h.level === 3 ? 'pl-3' : ''}>
+          <a
+            href={`#${h.id}`}
+            data-toc-link={h.id}
+            class="block text-sm text-midgray hover:text-charcoal transition-colors
+                   duration-100 leading-snug py-0.5"
+          >
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<script>
+  const tocLinks = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]');
+  if (tocLinks.length > 0) {
+    const headingIds = Array.from(tocLinks).map((el) => el.dataset.tocLink!);
+    const headingEls = headingIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const activate = (id: string) => {
+      tocLinks.forEach((link) => {
+        const active = link.dataset.tocLink === id;
+        link.classList.toggle('text-bordeaux', active);
+        link.classList.toggle('text-midgray', !active);
+        link.classList.toggle('border-l-2', active);
+        link.classList.toggle('border-bordeaux', active);
+        link.classList.toggle('pl-2', active);
+        link.classList.toggle('-ml-2', active);
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            activate(entry.target.id);
+            break;
+          }
+        }
+      },
+      { rootMargin: '-10% 0px -80% 0px', threshold: 0 }
+    );
+
+    headingEls.forEach((el) => observer.observe(el));
+  }
+</script>

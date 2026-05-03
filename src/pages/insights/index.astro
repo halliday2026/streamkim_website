@@ -1,0 +1,129 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import InsightCard from '../../components/sections/InsightCard.astro';
+
+// Page 1 of the insights archive. Pages 2+ are at /insights/page/[page].
+// Pagination infrastructure: show first 9; link to /insights/page/2 if more exist.
+const PAGE_SIZE = 9;
+
+const allArticles = (await getCollection('insights', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime()
+);
+
+const pageArticles = allArticles.slice(0, PAGE_SIZE);
+const totalPages = Math.ceil(allArticles.length / PAGE_SIZE);
+
+// Resolve authors for the current page's articles
+const resolvedArticles = await Promise.all(
+  pageArticles.map(async (article) => {
+    const attorney = await getEntry('attorneys', article.data.author);
+    return {
+      title: article.data.title,
+      slug: article.id,
+      publishDate: article.data.publishDate,
+      practiceAreas: article.data.practiceAreas,
+      excerpt: article.data.excerpt,
+      resolvedAuthor: attorney
+        ? { name: attorney.data.name, slug: attorney.id }
+        : { name: article.data.author, slug: article.data.author },
+    };
+  })
+);
+
+// Build filter strip: practices that have ≥1 published insight, sorted by strategic order
+const practicesWithInsights = new Set(allArticles.flatMap((i) => i.data.practiceAreas));
+const allPractices = (await getCollection('practice-areas'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .filter((p) => practicesWithInsights.has(p.id));
+---
+
+<BaseLayout
+  title="Insights | Stream Kim Hicks Wrage & Alfaro, P.C."
+  description="Perspectives on civil litigation, public entity law, healthcare regulation, and construction from the attorneys of Stream Kim."
+>
+  <div class="bg-bone py-20 lg:py-28">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <header class="mb-12">
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brass mb-4">
+          Publications
+        </p>
+        <h1
+          class="font-display text-4xl lg:text-5xl font-medium text-charcoal leading-snug
+                 tracking-[-0.02em]"
+        >
+          Insights
+        </h1>
+        <p class="mt-4 text-lg text-midgray max-w-2xl leading-relaxed">
+          Perspectives on civil litigation, public entity law, healthcare regulation, and
+          construction from the attorneys of Stream Kim.
+        </p>
+      </header>
+
+      <!-- Filter strip: "All" is active on this page -->
+      {allPractices.length > 0 && (
+        <nav aria-label="Filter by practice area" class="mb-10">
+          <ul class="flex flex-wrap gap-2">
+            <li>
+              <a
+                href="/insights"
+                class="inline-block text-sm px-3 py-1.5 border border-bordeaux text-bordeaux
+                       font-medium"
+                aria-current="page"
+              >
+                All
+              </a>
+            </li>
+            {allPractices.map((p) => (
+              <li>
+                <a
+                  href={`/insights/practice/${p.id}`}
+                  class="inline-block text-sm px-3 py-1.5 border border-charcoal/20
+                         text-charcoal hover:border-bordeaux hover:text-bordeaux
+                         transition-colors duration-150"
+                >
+                  {p.data.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
+      <!-- Article grid -->
+      {resolvedArticles.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {resolvedArticles.map((article) => (
+            <InsightCard
+              title={article.title}
+              slug={article.slug}
+              publishDate={article.publishDate}
+              author={article.resolvedAuthor}
+              practiceAreas={article.practiceAreas}
+              excerpt={article.excerpt}
+            />
+          ))}
+        </div>
+      ) : (
+        <p class="text-midgray">No articles have been published yet.</p>
+      )}
+
+      <!-- Pagination nav: only rendered when there are multiple pages -->
+      {totalPages > 1 && (
+        <nav aria-label="Pagination" class="mt-12 flex items-center justify-center gap-6">
+          <span class="text-sm text-midgray" aria-current="page">
+            Page 1 of {totalPages}
+          </span>
+          <a
+            href="/insights/page/2"
+            class="text-sm text-charcoal hover:text-bordeaux transition-colors duration-150"
+          >
+            Next →
+          </a>
+        </nav>
+      )}
+
+    </div>
+  </div>
+</BaseLayout>

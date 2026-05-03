@@ -1,0 +1,82 @@
+---
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+
+export interface ArticleBodyProps {
+  Content: AstroComponentFactory;
+}
+
+const { Content } = Astro.props as ArticleBodyProps;
+---
+
+<div class="article-prose">
+  <Content />
+</div>
+
+<style>
+  /* Article prose styles — no @tailwindcss/typography dependency */
+  .article-prose :global(p) {
+    font-size: 1.125rem;
+    margin-bottom: 1.375rem;
+    line-height: 1.7;
+    color: #1a1a1a;
+  }
+  .article-prose :global(h2) {
+    font-family: 'Source Serif 4 Variable', Georgia, serif;
+    font-size: 1.625rem;
+    font-weight: 500;
+    margin-top: 2.5rem;
+    margin-bottom: 0.875rem;
+    color: #1a1a1a;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .article-prose :global(h3) {
+    font-family: 'Source Serif 4 Variable', Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-top: 2rem;
+    margin-bottom: 0.625rem;
+    color: #1a1a1a;
+    line-height: 1.35;
+  }
+  .article-prose :global(ul),
+  .article-prose :global(ol) {
+    margin-bottom: 1.375rem;
+    padding-left: 1.5rem;
+  }
+  .article-prose :global(ul) {
+    list-style-type: disc;
+  }
+  .article-prose :global(ol) {
+    list-style-type: decimal;
+  }
+  .article-prose :global(li) {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.65;
+    color: #1a1a1a;
+  }
+  .article-prose :global(a) {
+    color: #6b0f1a;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .article-prose :global(hr) {
+    border: none;
+    border-top: 1px solid #c4a572;
+    margin: 2rem 0;
+  }
+  .article-prose :global(em) {
+    font-style: italic;
+  }
+  .article-prose :global(strong) {
+    font-weight: 600;
+  }
+  .article-prose :global(blockquote) {
+    border-left: 3px solid #c4a572;
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    color: #6b7280;
+    font-style: italic;
+  }
+</style>

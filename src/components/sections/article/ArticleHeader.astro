@@ -1,0 +1,62 @@
+---
+export interface ArticleHeaderProps {
+  title: string;
+  publishDate: Date;
+  author: { name: string; slug: string };
+  practiceAreas: Array<{ name: string; slug: string }>;
+  readingTime: string;
+  featuredImage?: string;
+}
+
+const { title, publishDate, author, practiceAreas, readingTime, featuredImage } =
+  Astro.props as ArticleHeaderProps;
+
+const formattedDate = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(publishDate);
+---
+
+<header class="bg-bone pt-12 lg:pt-16 pb-8 lg:pb-10">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl">
+      {practiceAreas.length > 0 && (
+        <div class="flex flex-wrap gap-3 mb-4">
+          {practiceAreas.map((pa) => (
+            <a
+              href={`/practice-areas/${pa.slug}`}
+              class="text-xs font-semibold uppercase tracking-[0.25em] text-bordeaux
+                     hover:text-bordeaux/70 transition-colors duration-150"
+            >
+              {pa.name}
+            </a>
+          ))}
+        </div>
+      )}
+      <h1
+        class="font-display text-4xl lg:text-5xl font-medium text-charcoal leading-snug
+               tracking-[-0.02em]"
+      >
+        {title}
+      </h1>
+      <div class="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-midgray">
+        <a
+          href={`/attorneys/${author.slug}`}
+          class="text-charcoal hover:text-bordeaux transition-colors duration-150"
+        >
+          {author.name}
+        </a>
+        <span aria-hidden="true">·</span>
+        <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+        <span aria-hidden="true">·</span>
+        <span>{readingTime}</span>
+      </div>
+    </div>
+    {featuredImage && (
+      <div class="mt-8 max-w-3xl">
+        <img src={featuredImage} alt="" class="w-full max-h-[480px] object-cover" loading="eager" />
+      </div>
+    )}
+  </div>
+</header>

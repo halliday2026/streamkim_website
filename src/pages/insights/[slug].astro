@@ -1,0 +1,167 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionDivider from '../../components/ui/SectionDivider.astro';
+import ArticleHeader from '../../components/sections/article/ArticleHeader.astro';
+import ArticleBody from '../../components/sections/article/ArticleBody.astro';
+import ArticleToC from '../../components/sections/article/ArticleToC.astro';
+import ArticleAuthorCard from '../../components/sections/article/ArticleAuthorCard.astro';
+import ArticleRelatedInsights from '../../components/sections/article/ArticleRelatedInsights.astro';
+import ArticleNewsletter from '../../components/sections/article/ArticleNewsletter.astro';
+import { calculateReadingTime } from '../../utils/readingTime';
+
+export async function getStaticPaths() {
+  const insights = await getCollection('insights', ({ data }) => !data.draft);
+  return insights.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const slug = entry.id;
+
+// Render markdown body — headings array provides IDs that match Astro's rendered output
+const { Content, headings: astroHeadings } = await render(entry);
+
+// Reading time from raw markdown body
+const body = entry.body ?? '';
+const readingTime = calculateReadingTime(body);
+
+// ToC headings: use Astro's render() slugs (not a manual slugify) to guarantee ID match
+const headings = astroHeadings
+  .filter((h) => h.depth === 2 || h.depth === 3)
+  .map((h) => ({ level: h.depth as 2 | 3, text: h.text, id: h.slug }));
+
+// Resolve author
+const authorEntry = await getEntry('attorneys', entry.data.author);
+const author = authorEntry
+  ? { name: authorEntry.data.name, slug: authorEntry.id }
+  : { name: entry.data.author, slug: entry.data.author };
+
+// Resolve practice area names for header tags
+const practiceEntries = await Promise.all(
+  entry.data.practiceAreas.map((s) => getEntry('practice-areas', s))
+);
+const practiceAreas = practiceEntries
+  .filter(Boolean)
+  .map((p) => ({ name: p!.data.name, slug: p!.id }));
+
+// Related articles: non-draft, same practice area(s), excluding self, newest-first, max 3
+const allInsights = await getCollection('insights', ({ data }) => !data.draft);
+const relatedInsights = allInsights
+  .filter(
+    (i) =>
+      i.id !== slug &&
+      i.data.practiceAreas.some((p) => entry.data.practiceAreas.includes(p))
+  )
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 3)
+  .map((i) => ({
+    title: i.data.title,
+    slug: i.id,
+    publishDate: i.data.publishDate,
+    author: i.data.author,
+    practiceAreas: i.data.practiceAreas,
+    excerpt: i.data.excerpt,
+  }));
+
+// Featured image: skip placeholder strings
+const realFeaturedImage =
+  entry.data.featuredImage && !entry.data.featuredImage.startsWith('[PLACEHOLDER')
+    ? entry.data.featuredImage
+    : undefined;
+
+// Canonical URL
+const canonicalUrl = new URL(`/insights/${slug}`, Astro.site).href;
+
+// JSON-LD: Article schema
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: entry.data.title,
+  author: {
+    '@type': 'Person',
+    name: author.name,
+    url: new URL(`/attorneys/${author.slug}`, Astro.site).href,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Stream Kim Hicks Wrage & Alfaro, P.C.',
+    url: Astro.site?.href ?? 'https://halliday2026.github.io/streamkim_website/',
+  },
+  datePublished: entry.data.publishDate.toISOString().split('T')[0],
+  dateModified: entry.data.publishDate.toISOString().split('T')[0],
+  url: canonicalUrl,
+  description: entry.data.metaDescription ?? entry.data.excerpt,
+  ...(realFeaturedImage && { image: realFeaturedImage }),
+};
+
+// JSON-LD: BreadcrumbList
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href ?? '/' },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Insights',
+      item: new URL('/insights', Astro.site).href,
+    },
+    { '@type': 'ListItem', position: 3, name: entry.data.title, item: canonicalUrl },
+  ],
+};
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.metaDescription ?? entry.data.excerpt}
+  ogType="article"
+  ogImage={realFeaturedImage}
+  canonicalUrl={canonicalUrl}
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
+
+  <ArticleHeader
+    title={entry.data.title}
+    publishDate={entry.data.publishDate}
+    author={author}
+    practiceAreas={practiceAreas}
+    readingTime={readingTime}
+    featuredImage={realFeaturedImage}
+  />
+
+  <!-- Two-column layout: body left, sticky ToC sidebar right (desktop only) -->
+  <div class="bg-bone py-10 lg:py-14">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 lg:gap-12">
+        <div class="min-w-0">
+          <ArticleBody Content={Content} />
+        </div>
+        <aside class="hidden lg:block">
+          <ArticleToC headings={headings} />
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  {authorEntry && (
+    <ArticleAuthorCard
+      name={authorEntry.data.name}
+      slug={authorEntry.id}
+      title={authorEntry.data.title}
+      leadParagraph={authorEntry.data.leadParagraph}
+      portrait={authorEntry.data.portrait}
+    />
+  )}
+
+  <ArticleRelatedInsights articles={relatedInsights} />
+
+  <ArticleNewsletter />
+
+  <SectionDivider />
+</BaseLayout>

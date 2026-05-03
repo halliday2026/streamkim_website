@@ -94,7 +94,13 @@ GitHub Actions evaluates `${{ vars.SITE }}` to `""` (empty string) when the repo
 **5. `check-placeholders.mjs` scans `dist/`, not `src/`**
 `[PLACEHOLDER — ...]` strings are allowed and expected in `src/content/` during development. The postbuild script only fails if those strings reach `dist/`. A placeholder string in a source file will not break the build until something renders it into production output — which is intentional, so content stubs can live in source while page templates are being built.
 
-**6. Validator-required fields cannot use `[PLACEHOLDER]` strings**
+**6. JSON-LD schema script tags require `is:inline`.**
+When injecting JSON-LD via `<script type="application/ld+json" set:html={JSON.stringify(schema)} />`,
+always add `is:inline` to prevent Astro's script processing from interfering with the JSON content.
+Without `is:inline`, Astro may try to bundle or transform the script tag. This applies to all
+structured data injection across practice area pages, attorney pages, and article pages.
+
+**7. Validator-required fields cannot use `[PLACEHOLDER]` strings**
 Zod schemas with format validators (email, coerce.date, numeric range, URL) reject `[PLACEHOLDER — ...]` strings because they fail validation. For these fields, use syntactically valid but obviously synthetic values:
 
 - Email: `placeholder@example.com`
@@ -103,6 +109,9 @@ Zod schemas with format validators (email, coerce.date, numeric range, URL) reje
 - URL: `https://example.com`
 
 The `[PLACEHOLDER]` convention applies to free-text string fields only. Validator-required fields surface in the postbuild check via the synthetic values themselves — `placeholder@example.com` reaching production is the signal that real data is missing.
+
+**8. Article ToC heading IDs come from `render()`, not a custom slugify().**
+The `render()` function from `astro:content` returns a `headings` array containing `{ depth, slug, text }` for each heading — where `slug` is the exact ID Astro applies to the rendered heading element. Use this array for ToC generation rather than maintaining a parallel slug algorithm. A custom slugify() will diverge from Astro's github-slugger behavior on special characters (e.g., em dashes produce double hyphens in Astro's slugger, not single). The headings array is available as: `const { Content, headings } = await render(entry);`
 
 ---
 

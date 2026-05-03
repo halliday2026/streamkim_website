@@ -512,3 +512,147 @@ interface IntakeFormProps {
 **Acceptance criteria:**
 - Done means: all 5 fields present; third-party endpoint wired; disclaimer below submit;
   success/error states handled accessibly; no backend code
+
+---
+
+## Article Page Components (`src/components/sections/article/`)
+
+Components specific to the individual article page template (`/insights/[slug]`). All live in
+the `article/` sub-directory.
+
+---
+
+### ArticleHeader
+
+**Purpose:** Article page header — practice area tags, H1 title, author/date/reading-time byline,
+and optional featured image.
+
+**Props:**
+```typescript
+interface ArticleHeaderProps {
+  title: string;
+  publishDate: Date;
+  author: { name: string; slug: string };   // resolved at page level
+  practiceAreas: Array<{ name: string; slug: string }>; // resolved at page level
+  readingTime: string;                      // from calculateReadingTime() in src/utils/readingTime.ts
+  featuredImage?: string;                   // real path only — caller strips placeholder strings
+}
+```
+
+**Note:** Practice area tags appear here (top of article) only. There is no separate footer
+practice-tag component — the header tags are the sole navigation entry point for practice areas
+on this page.
+
+**Acceptance criteria:**
+- Done means: H1 renders; byline shows author linked to bio, formatted date, reading time;
+  practice tags link to `/practice-areas/[slug]`; featured image conditional on prop
+
+---
+
+### ArticleBody
+
+**Purpose:** Renders the article's markdown body with scoped prose styles.
+
+**Props:**
+```typescript
+interface ArticleBodyProps {
+  Content: AstroComponentFactory;   // from render(entry) in astro:content
+}
+```
+
+Applies scoped `.article-prose` styles (paragraphs at `text-lg`, headings in Source Serif 4,
+bordeaux links) without requiring `@tailwindcss/typography`.
+
+**Acceptance criteria:**
+- Done means: markdown body renders; paragraphs, headings, lists, links, and blockquotes styled;
+  scoped so styles do not leak to surrounding sections
+
+---
+
+### ArticleToC
+
+**Purpose:** Sticky sidebar table of contents — desktop only, generated from article H2/H3 headings
+with IntersectionObserver highlighting of the active section.
+
+**Props:**
+```typescript
+interface ArticleToCProps {
+  headings: Array<{ level: 2 | 3; text: string; id: string }>;
+}
+```
+
+**Key behavior:** Heading IDs must be sourced from `render(entry).headings[].slug` (Astro's
+pipeline), not from a custom slugify function. Renders nothing if `headings.length < 2`. Hidden
+on mobile via `hidden lg:block`. The IntersectionObserver `<script>` is the only JavaScript
+used on the article page.
+
+**Acceptance criteria:**
+- Done means: ≥2 headings → nav renders; `href="#id"` values match rendered heading `id`
+  attributes; active heading highlighted; hidden on mobile; keyboard navigable
+
+---
+
+### ArticleAuthorCard
+
+**Purpose:** Author attribution section below the article body — portrait or silhouette, name,
+title, truncated bio, link to full bio page.
+
+**Props:**
+```typescript
+interface ArticleAuthorCardProps {
+  name: string;
+  slug: string;
+  title: string;
+  leadParagraph: string;    // truncated to ~120 chars
+  portrait?: string;        // real path only; silhouette rendered if absent or placeholder
+}
+```
+
+**Acceptance criteria:**
+- Done means: renders with and without portrait; name and "View bio" link to `/attorneys/[slug]`;
+  silhouette matches AttorneyCard placeholder style; section hidden if `authorEntry` is null
+
+---
+
+### ArticleRelatedInsights
+
+**Purpose:** Grid of up to 3 related articles — same practice area(s), excluding the current
+article, newest-first. Reuses `InsightCard`; resolves author slugs internally.
+
+**Props:**
+```typescript
+interface ArticleRelatedInsightsProps {
+  articles: Array<{
+    title: string;
+    slug: string;
+    publishDate: Date;
+    author: string;       // raw slug — resolved internally before InsightCard
+    practiceAreas: string[];
+    excerpt: string;
+  }>;
+}
+```
+
+Renders nothing if `articles.length === 0`.
+
+**Acceptance criteria:**
+- Done means: 1–3 cards shown; author resolved; section absent when no related articles exist
+
+---
+
+### ArticleNewsletter
+
+**Purpose:** Newsletter signup section at the end of each article — structural placeholder until
+a real form endpoint is wired.
+
+**Props:** None.
+
+The form `action` attribute holds `[PLACEHOLDER — newsletter form endpoint]`, which causes the
+postbuild placeholder check to fail — intentional until a real endpoint is configured. A
+`{import.meta.env.DEV && ...}` block displays a reminder in development that the endpoint is
+not yet wired. This block is excluded from production builds because `import.meta.env.DEV` is
+`false` at build time (not runtime) and is tree-shaken by Vite.
+
+**Acceptance criteria:**
+- Done means: form renders with email input and submit button; DEV reminder visible in dev;
+  DEV reminder absent in production build output

@@ -1,0 +1,52 @@
+---
+// Structural placeholder for the newsletter signup section.
+// The form action is a placeholder; the postbuild check will catch it before production.
+---
+
+<section
+  aria-labelledby="newsletter-heading"
+  class="bg-charcoal py-12 lg:py-16"
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2
+      id="newsletter-heading"
+      class="font-display text-2xl font-medium text-bone leading-snug
+             tracking-[-0.01em] mb-2"
+    >
+      Legal Updates from Stream Kim
+    </h2>
+    <p class="text-bone/70 text-sm mb-6 max-w-md leading-relaxed">
+      Subscribe to receive analysis on California civil litigation, public entity law, and
+      regulatory developments.
+    </p>
+    <form
+      action="[PLACEHOLDER — newsletter form endpoint]"
+      method="POST"
+      class="flex flex-col sm:flex-row gap-3 max-w-lg"
+    >
+      <label for="nl-email" class="sr-only">Email address</label>
+      <input
+        type="email"
+        id="nl-email"
+        name="email"
+        required
+        placeholder="your@organization.com"
+        class="flex-1 px-4 py-2.5 bg-bone text-charcoal text-sm border border-charcoal/20
+               focus:outline-none focus:border-bordeaux placeholder:text-midgray"
+      />
+      <button
+        type="submit"
+        class="px-6 py-2.5 bg-bordeaux text-white text-sm font-medium
+               hover:bg-bordeaux/90 transition-colors duration-150 shrink-0
+               focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+      >
+        Subscribe
+      </button>
+    </form>
+    {import.meta.env.DEV && (
+      <p class="text-xs text-bordeaux/70 mt-3">
+        DEV: Newsletter endpoint not configured — wire before launch.
+      </p>
+    )}
+  </div>
+</section>
