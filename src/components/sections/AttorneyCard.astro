@@ -12,12 +12,22 @@ export interface AttorneyCardProps {
 const { name, slug, title, practiceAreas, portrait } = Astro.props as AttorneyCardProps;
 
 const hasRealPortrait = Boolean(portrait) && !portrait!.startsWith('[PLACEHOLDER');
+
 const displayedPractices = practiceAreas.slice(0, 2);
-const initials = name
-  .split(' ')
-  .filter((_, i, arr) => i === 0 || i === arr.length - 1)
-  .map((w) => w[0])
-  .join('');
+
+// Placeholder detection: names that haven't been authored yet follow the
+// "[PLACEHOLDER — ...]" convention from CLAUDE.md. Extracting initials from
+// these strings produces gibberish like "[n", so we skip initials entirely
+// and fall back to a person silhouette. Real names (no "[PLACEHOLDER")
+// extract first and last initial as before.
+const isPlaceholderName = name.includes('[PLACEHOLDER');
+const initials = isPlaceholderName
+  ? ''
+  : name
+      .split(' ')
+      .filter((_, i, arr) => i === 0 || i === arr.length - 1)
+      .map((w) => w[0])
+      .join('');
 ---
 
 <article class="bg-white border border-gray-200 hover:border-charcoal transition-colors duration-150">
@@ -30,6 +40,23 @@ const initials = name
         class="w-full h-full object-cover"
         loading="lazy"
       />
+    ) : isPlaceholderName ? (
+      /* Person silhouette — rendered when name is a placeholder string.
+         Inline SVG avoids external dependencies; currentColor inherits midgray
+         from the parent so it reads as muted, not as a real graphic. */
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 48 48"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="w-16 h-16 text-gray-300"
+      >
+        <circle cx="24" cy="16" r="8" />
+        <path d="M6 44c0-9.941 8.059-18 18-18s18 8.059 18 18" />
+      </svg>
     ) : (
       <span class="text-3xl font-display text-midgray select-none" aria-hidden="true">
         {initials}
