@@ -1,0 +1,59 @@
+---
+// portrait is typed as string (not ImageMetadata) until real portrait files are available.
+// See docs/component-library.md AttorneyCard section for migration notes.
+export interface AttorneyCardProps {
+  name: string;
+  slug: string;
+  title: string;
+  practiceAreas: string[];
+  portrait?: string;
+}
+
+const { name, slug, title, practiceAreas, portrait } = Astro.props as AttorneyCardProps;
+
+const hasRealPortrait = Boolean(portrait) && !portrait!.startsWith('[PLACEHOLDER');
+const displayedPractices = practiceAreas.slice(0, 2);
+const initials = name
+  .split(' ')
+  .filter((_, i, arr) => i === 0 || i === arr.length - 1)
+  .map((w) => w[0])
+  .join('');
+---
+
+<article class="bg-white border border-gray-200 hover:border-navy transition-colors duration-150">
+  <!-- Portrait area -->
+  <div class="aspect-square w-full overflow-hidden bg-gray-100 flex items-center justify-center">
+    {hasRealPortrait ? (
+      <img
+        src={`/src/assets/attorneys/${portrait}`}
+        alt={`${name}, ${title}, Stream Kim Hicks Wrage & Alfaro`}
+        class="w-full h-full object-cover"
+        loading="lazy"
+      />
+    ) : (
+      <span class="text-3xl font-display text-midgray select-none" aria-hidden="true">
+        {initials}
+      </span>
+    )}
+  </div>
+
+  <!-- Info -->
+  <div class="p-5">
+    <p class="text-xs font-semibold tracking-widest uppercase text-midgray mb-1">
+      {title}
+    </p>
+    <h3 class="font-display text-xl font-normal text-navy">
+      <a
+        href={`/attorneys/${slug}`}
+        class="hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-navy focus-visible:outline-offset-2"
+      >
+        {name}
+      </a>
+    </h3>
+    {displayedPractices.length > 0 && (
+      <p class="mt-2 text-sm text-midgray">
+        {displayedPractices.join(' · ')}
+      </p>
+    )}
+  </div>
+</article>

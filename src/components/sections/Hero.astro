@@ -1,0 +1,38 @@
+---
+import Button from '../ui/Button.astro';
+
+export interface HeroProps {
+  headline: string;
+  subhead: string;
+  primaryCta: { label: string; href: string };
+  secondaryPhone: string;
+}
+
+const { headline, subhead, primaryCta, secondaryPhone } = Astro.props as HeroProps;
+---
+
+<section aria-labelledby="hero-headline" class="bg-offwhite py-24 lg:py-32">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl">
+      <h1
+        id="hero-headline"
+        class="font-display text-5xl lg:text-6xl font-normal leading-tight tracking-[-0.02em] text-navy"
+      >
+        {headline}
+      </h1>
+
+      <p class="mt-6 text-lg lg:text-xl text-midgray leading-relaxed max-w-2xl">
+        {subhead}
+      </p>
+
+      <div class="mt-10 flex flex-col sm:flex-row gap-4">
+        <Button href={primaryCta.href} variant="primary">
+          {primaryCta.label}
+        </Button>
+        <Button href={`tel:${secondaryPhone.replace(/\D/g, '')}`} variant="ghost">
+          {secondaryPhone}
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>

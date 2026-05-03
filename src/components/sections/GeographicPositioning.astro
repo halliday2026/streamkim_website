@@ -1,0 +1,75 @@
+---
+export interface GeographicPositioningProps {
+  tagline: string;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
+  phone: string;
+  parkingNote?: string;
+}
+
+const { tagline, address, phone, parkingNote } =
+  Astro.props as GeographicPositioningProps;
+
+const mapsQuery = encodeURIComponent(
+  `${address.street}, ${address.city}, ${address.state} ${address.zip}`
+);
+---
+
+<section aria-labelledby="location-heading" class="py-16 lg:py-20 bg-offwhite">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2
+      id="location-heading"
+      class="font-display text-3xl lg:text-4xl font-normal text-navy leading-snug tracking-[-0.01em] mb-10"
+    >
+      Riverside, California
+    </h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+      <!-- Address column -->
+      <div>
+        <p class="text-lg text-charcoal leading-relaxed mb-6">
+          {tagline}
+        </p>
+        <address class="not-italic space-y-1 text-base text-charcoal">
+          <p>{address.street}</p>
+          <p>{address.city}, {address.state} {address.zip}</p>
+          <p class="mt-3">
+            <a
+              href={`tel:${phone.replace(/\D/g, '')}`}
+              class="text-oxblood hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-oxblood focus-visible:outline-offset-2"
+            >
+              {phone}
+            </a>
+          </p>
+        </address>
+        {parkingNote && (
+          <p class="mt-4 text-sm text-midgray">{parkingNote}</p>
+        )}
+      </div>
+
+      <!-- Map placeholder column -->
+      <!-- TODO Session #13: replace with a static map embed or Google Maps iframe -->
+      <div
+        class="aspect-video w-full bg-gray-100 flex flex-col items-center justify-center rounded text-center px-6"
+        role="img"
+        aria-label={`Map showing ${address.street}, ${address.city}, ${address.state}`}
+      >
+        <p class="text-sm text-midgray mb-2">Map</p>
+        <a
+          href={`https://maps.google.com/?q=${mapsQuery}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sm text-oxblood hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-oxblood focus-visible:outline-offset-2"
+        >
+          Open in Google Maps
+          <span class="sr-only">(opens in a new tab)</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>

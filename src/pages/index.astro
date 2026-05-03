@@ -1,17 +1,126 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import PracticeGrid from '../components/sections/PracticeGrid.astro';
+import AttorneysPreview from '../components/sections/AttorneysPreview.astro';
+import NotableMattersStrip from '../components/sections/NotableMattersStrip.astro';
+import InsightsPreview from '../components/sections/InsightsPreview.astro';
+import GeographicPositioning from '../components/sections/GeographicPositioning.astro';
+import ContactCTA from '../components/sections/ContactCTA.astro';
 
+// ── Practice areas — sorted by strategic priority (order field), NOT alphabetically ──
+const practiceAreas = (await getCollection('practice-areas')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+// ── Attorneys — sorted by display order; fallback 999 keeps unordered entries last ──
+const attorneys = (await getCollection('attorneys'))
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
+  .slice(0, 5);
+
+// ── Notable matters — sorted by display order, capped at 5 ──
+const notableMatters = (await getCollection('notable-matters'))
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
+  .slice(0, 5);
+
+// ── Insights — non-draft only, sorted newest-first, capped at 3 ──
+const recentInsights = (await getCollection('insights', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 3);
+
+// ── Shape data for each section component ──
+
+const practicesForGrid = practiceAreas.map((p) => ({
+  name: p.data.name,
+  slug: p.id,
+  tagline: p.data.tagline,
+  order: p.data.order,
+}));
+
+const attorneysForPreview = attorneys.map((a) => ({
+  name: a.data.name,
+  slug: a.id,
+  title: a.data.title,
+  practiceAreas: a.data.practiceAreas,
+  portrait: a.data.portrait,
+}));
+
+const mattersForStrip = notableMatters.map((m) => ({
+  title: m.data.title,
+  practiceArea: m.data.practiceArea,
+  description: m.data.description,
+  outcome: m.data.outcome,
+}));
+
+// InsightsPreview receives raw author slugs — it resolves them internally
+const insightsForPreview = recentInsights.map((i) => ({
+  title: i.data.title,
+  slug: i.id,
+  publishDate: i.data.publishDate,
+  author: i.data.author,
+  practiceAreas: i.data.practiceAreas,
+  excerpt: i.data.excerpt,
+}));
+
+// Practice options for ContactCTA dropdown — same collection as practicesForGrid
+const practiceOptions = practiceAreas.map((p) => ({
+  slug: p.id,
+  name: p.data.name,
+}));
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="Stream Kim Hicks Wrage & Alfaro, P.C."
+  description="A Riverside civil litigation firm representing public entities, healthcare providers, construction-industry clients, and businesses across California."
+>
+  <!--
+    Hero copy from docs/strategic-brief.md §6.1 (Halliday recommendation).
+    Pending Stream Kim partner approval before launch.
+  -->
+  <Hero
+    headline="Civil trial counsel for institutions facing their hardest cases."
+    subhead="A Riverside civil litigation firm representing public entities, healthcare providers, construction-industry clients, and businesses across California."
+    primaryCta={{ label: "Schedule a Consultation", href: "#contact" }}
+    secondaryPhone="[PLACEHOLDER — (951) 555-0000]"
+  />
+
+  <PracticeGrid practices={practicesForGrid} />
+
+  <AttorneysPreview
+    attorneys={attorneysForPreview}
+    viewAllHref="/attorneys"
+  />
+
+  <NotableMattersStrip
+    matters={mattersForStrip}
+    viewAllHref="/notable-matters"
+  />
+
+  <InsightsPreview
+    articles={insightsForPreview}
+    viewAllHref="/insights"
+  />
+
+  <GeographicPositioning
+    tagline="Headquartered in Riverside, serving clients throughout the Inland Empire and across California."
+    address={{
+      street: "[PLACEHOLDER — Street address]",
+      city: "Riverside",
+      state: "CA",
+      zip: "[PLACEHOLDER — ZIP]",
+    }}
+    phone="[PLACEHOLDER — (951) 555-0000]"
+  />
+
+  <!--
+    formAction placeholder — the postbuild guard catches this until the endpoint
+    is configured. See docs/build-sequence.md Session #12 for form wiring.
+  -->
+  <ContactCTA
+    heading="Schedule a Consultation"
+    formAction="[PLACEHOLDER — Formspree endpoint, see docs/launch-checklist.md]"
+    practiceOptions={practiceOptions}
+    id="contact"
+  />
+</BaseLayout>

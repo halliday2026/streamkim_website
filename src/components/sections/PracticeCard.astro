@@ -1,0 +1,25 @@
+---
+export interface PracticeCardProps {
+  name: string;
+  slug: string;
+  tagline: string;
+}
+
+const { name, slug, tagline } = Astro.props as PracticeCardProps;
+---
+
+<article class="bg-white border border-gray-200 p-6 hover:border-navy transition-colors duration-150 flex flex-col">
+  <h3 class="font-display text-xl font-normal text-navy">
+    {name}
+  </h3>
+  <p class="mt-2 text-sm text-midgray leading-relaxed flex-1">
+    {tagline}
+  </p>
+  <a
+    href={`/practice-areas/${slug}`}
+    class="mt-4 inline-flex items-center text-sm font-medium text-oxblood hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-oxblood focus-visible:outline-offset-2"
+  >
+    Learn more →
+    <span class="sr-only"> about {name}</span>
+  </a>
+</article>

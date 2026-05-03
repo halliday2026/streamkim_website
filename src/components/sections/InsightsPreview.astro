@@ -1,0 +1,62 @@
+---
+import { getEntry } from 'astro:content';
+import InsightCard from './InsightCard.astro';
+import Link from '../ui/Link.astro';
+
+export interface InsightsPreviewProps {
+  articles: Array<{
+    title: string;
+    slug: string;
+    publishDate: Date;
+    author: string; // raw attorney slug — resolved internally before passing to InsightCard
+    practiceAreas: string[];
+    excerpt: string;
+  }>;
+  viewAllHref: string;
+}
+
+const { articles, viewAllHref } = Astro.props as InsightsPreviewProps;
+
+// Author resolution: per docs/component-library.md InsightCard contract,
+// resolve each author slug to { name, slug } before passing to the card.
+// Falls back to the raw slug as display name if the attorney entry is not found.
+const resolvedArticles = await Promise.all(
+  articles.map(async (article) => {
+    const attorney = await getEntry('attorneys', article.author);
+    return {
+      ...article,
+      resolvedAuthor: attorney
+        ? { name: attorney.data.name, slug: attorney.id }
+        : { name: article.author, slug: article.author },
+    };
+  })
+);
+---
+
+{resolvedArticles.length > 0 && (
+  <section aria-labelledby="insights-heading" class="py-16 lg:py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="insights-heading"
+        class="font-display text-3xl lg:text-4xl font-normal text-navy leading-snug tracking-[-0.01em] mb-10"
+      >
+        Insights
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {resolvedArticles.map((article) => (
+          <InsightCard
+            title={article.title}
+            slug={article.slug}
+            publishDate={article.publishDate}
+            author={article.resolvedAuthor}
+            practiceAreas={article.practiceAreas}
+            excerpt={article.excerpt}
+          />
+        ))}
+      </div>
+      <div class="mt-8">
+        <Link href={viewAllHref} variant="body">View all insights</Link>
+      </div>
+    </div>
+  </section>
+)}

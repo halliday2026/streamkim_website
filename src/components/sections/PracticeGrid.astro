@@ -1,0 +1,36 @@
+---
+import PracticeCard from './PracticeCard.astro';
+
+export interface PracticeGridProps {
+  practices: Array<{
+    name: string;
+    slug: string;
+    tagline: string;
+    order: number;
+  }>;
+}
+
+const { practices } = Astro.props as PracticeGridProps;
+---
+
+{practices.length > 0 && (
+  <section aria-labelledby="practices-heading" class="py-16 lg:py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="practices-heading"
+        class="font-display text-3xl lg:text-4xl font-normal text-navy leading-snug tracking-[-0.01em] mb-10"
+      >
+        Practice Areas
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {practices.map((practice) => (
+          <PracticeCard
+            name={practice.name}
+            slug={practice.slug}
+            tagline={practice.tagline}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+)}

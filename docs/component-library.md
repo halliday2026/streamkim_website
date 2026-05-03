@@ -152,6 +152,13 @@ interface AttorneyCardProps {
 }
 ```
 
+**Portrait type (current implementation):** The schema stores `portrait` as `z.string().optional()` — a
+path string, not a static import. Until real portrait files are committed to `src/assets/attorneys/`,
+`AttorneyCard` accepts `portrait?: string` and renders a styled placeholder div when the value is
+absent or starts with `[PLACEHOLDER`. This will migrate to `portrait?: ImageMetadata` (using Astro's
+`<Image>` component) when real portrait files are available. **Do not change the component's portrait
+type without also adding the corresponding image files.**
+
 **Accessibility:**
 - Portrait `alt="[Name], [Title], Stream Kim"`
 - Card link wraps entire card OR anchor is on the name (not both)
