@@ -62,7 +62,7 @@ const truncatedBio =
       <!-- Bio info -->
       <div>
         <a
-          href={`/attorneys/${slug}`}
+          href={`${import.meta.env.BASE_URL}attorneys/${slug}`}
           class="font-display text-lg font-medium text-charcoal hover:text-bordeaux
                  transition-colors duration-150"
         >
@@ -71,7 +71,7 @@ const truncatedBio =
         <p class="text-sm text-midgray mt-0.5">{title}</p>
         <p class="mt-2 text-sm text-charcoal/80 leading-relaxed">{truncatedBio}</p>
         <a
-          href={`/attorneys/${slug}`}
+          href={`${import.meta.env.BASE_URL}attorneys/${slug}`}
           class="inline-block mt-3 text-sm text-bordeaux hover:underline underline-offset-4
                  focus-visible:outline-2 focus-visible:outline-bordeaux focus-visible:outline-offset-2"
         >

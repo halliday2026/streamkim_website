@@ -73,7 +73,7 @@ const realFeaturedImage =
     : undefined;
 
 // Canonical URL
-const canonicalUrl = new URL(`/insights/${slug}`, Astro.site).href;
+const canonicalUrl = Astro.url.href;
 
 // JSON-LD: Article schema
 const articleSchema = {
@@ -83,12 +83,12 @@ const articleSchema = {
   author: {
     '@type': 'Person',
     name: author.name,
-    url: new URL(`/attorneys/${author.slug}`, Astro.site).href,
+    url: new URL(`${import.meta.env.BASE_URL}attorneys/${author.slug}`, Astro.site).href,
   },
   publisher: {
     '@type': 'Organization',
     name: 'Stream Kim Hicks Wrage & Alfaro, P.C.',
-    url: Astro.site?.href ?? 'https://halliday2026.github.io/streamkim_website/',
+    url: new URL(import.meta.env.BASE_URL, Astro.site).href,
   },
   datePublished: entry.data.publishDate.toISOString().split('T')[0],
   dateModified: entry.data.publishDate.toISOString().split('T')[0],
@@ -102,12 +102,12 @@ const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href ?? '/' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL(import.meta.env.BASE_URL, Astro.site).href },
     {
       '@type': 'ListItem',
       position: 2,
       name: 'Insights',
-      item: new URL('/insights', Astro.site).href,
+      item: new URL(`${import.meta.env.BASE_URL}insights`, Astro.site).href,
     },
     { '@type': 'ListItem', position: 3, name: entry.data.title, item: canonicalUrl },
   ],

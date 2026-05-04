@@ -45,8 +45,9 @@ const allPractices = (await getCollection('practice-areas'))
   .filter((p) => practicesWithInsights.has(p.id));
 
 // Prev link: page 2's previous page is the index (/insights), not /insights/page/1
+const B = import.meta.env.BASE_URL;
 const prevUrl =
-  page.currentPage === 2 ? '/insights/' : `/insights/page/${page.currentPage - 1}`;
+  page.currentPage === 2 ? `${B}insights` : `${B}insights/page/${page.currentPage - 1}`;
 ---
 
 <BaseLayout
@@ -78,7 +79,7 @@ const prevUrl =
           <ul class="flex flex-wrap gap-2">
             <li>
               <a
-                href="/insights"
+                href={`${B}insights`}
                 class="inline-block text-sm px-3 py-1.5 border border-charcoal/20
                        text-charcoal hover:border-bordeaux hover:text-bordeaux
                        transition-colors duration-150"
@@ -89,7 +90,7 @@ const prevUrl =
             {allPractices.map((p) => (
               <li>
                 <a
-                  href={`/insights/practice/${p.id}`}
+                  href={`${B}insights/practice/${p.id}`}
                   class="inline-block text-sm px-3 py-1.5 border border-charcoal/20
                          text-charcoal hover:border-bordeaux hover:text-bordeaux
                          transition-colors duration-150"

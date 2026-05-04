@@ -25,7 +25,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
         <div class="flex flex-wrap gap-3 mb-4">
           {practiceAreas.map((pa) => (
             <a
-              href={`/practice-areas/${pa.slug}`}
+              href={`${import.meta.env.BASE_URL}practice-areas/${pa.slug}`}
               class="text-xs font-semibold uppercase tracking-[0.25em] text-bordeaux
                      hover:text-bordeaux/70 transition-colors duration-150"
             >

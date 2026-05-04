@@ -16,7 +16,7 @@ const { name, slug, tagline } = Astro.props as PracticeCardProps;
     {tagline}
   </p>
   <a
-    href={`/practice-areas/${slug}`}
+    href={`${import.meta.env.BASE_URL}practice-areas/${slug}`}
     class="mt-4 inline-flex items-center text-sm font-medium text-bordeaux hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-bordeaux focus-visible:outline-offset-2"
   >
     Learn more →

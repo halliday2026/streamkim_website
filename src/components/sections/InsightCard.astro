@@ -33,7 +33,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
   <!-- Title -->
   <h3 class="font-display text-xl font-medium text-charcoal leading-snug flex-1">
     <a
-      href={`/insights/${slug}`}
+      href={`${import.meta.env.BASE_URL}insights/${slug}`}
       class="hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-charcoal focus-visible:outline-offset-2"
     >
       {title}
@@ -48,7 +48,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
   <!-- Byline -->
   <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
     <a
-      href={`/attorneys/${author.slug}`}
+      href={`${import.meta.env.BASE_URL}attorneys/${author.slug}`}
       class="text-sm text-charcoal hover:text-charcoal/70 hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-charcoal focus-visible:outline-offset-2"
     >
       {author.name}

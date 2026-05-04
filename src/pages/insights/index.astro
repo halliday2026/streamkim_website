@@ -67,7 +67,7 @@ const allPractices = (await getCollection('practice-areas'))
           <ul class="flex flex-wrap gap-2">
             <li>
               <a
-                href="/insights"
+                href={`${import.meta.env.BASE_URL}insights`}
                 class="inline-block text-sm px-3 py-1.5 border border-bordeaux text-bordeaux
                        font-medium"
                 aria-current="page"
@@ -78,7 +78,7 @@ const allPractices = (await getCollection('practice-areas'))
             {allPractices.map((p) => (
               <li>
                 <a
-                  href={`/insights/practice/${p.id}`}
+                  href={`${import.meta.env.BASE_URL}insights/practice/${p.id}`}
                   class="inline-block text-sm px-3 py-1.5 border border-charcoal/20
                          text-charcoal hover:border-bordeaux hover:text-bordeaux
                          transition-colors duration-150"
@@ -116,7 +116,7 @@ const allPractices = (await getCollection('practice-areas'))
             Page 1 of {totalPages}
           </span>
           <a
-            href="/insights/page/2"
+            href={`${import.meta.env.BASE_URL}insights/page/2`}
             class="text-sm text-charcoal hover:text-bordeaux transition-colors duration-150"
           >
             Next →

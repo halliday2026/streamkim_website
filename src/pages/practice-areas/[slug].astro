@@ -78,7 +78,7 @@ const insightsForSection = relatedInsights.map((i) => ({
 }));
 
 // Schema.org: LegalService + BreadcrumbList (+ FAQPage if applicable)
-const canonicalUrl = new URL(`/practice-areas/${slug}`, Astro.site).href;
+const canonicalUrl = Astro.url.href;
 
 const legalServiceSchema = {
   '@context': 'https://schema.org',
@@ -88,7 +88,7 @@ const legalServiceSchema = {
   provider: {
     '@type': 'Organization',
     name: 'Stream Kim Hicks Wrage & Alfaro, P.C.',
-    url: Astro.site?.href ?? 'https://halliday2026.github.io/streamkim_website/',
+    url: new URL(import.meta.env.BASE_URL, Astro.site).href,
   },
   areaServed: { '@type': 'State', name: 'California' },
   url: canonicalUrl,
@@ -98,12 +98,12 @@ const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href ?? '/' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL(import.meta.env.BASE_URL, Astro.site).href },
     {
       '@type': 'ListItem',
       position: 2,
       name: 'Practice Areas',
-      item: new URL('/practice-areas', Astro.site).href,
+      item: new URL(`${import.meta.env.BASE_URL}practice-areas`, Astro.site).href,
     },
     { '@type': 'ListItem', position: 3, name: practice.data.name, item: canonicalUrl },
   ],

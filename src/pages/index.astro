@@ -94,21 +94,21 @@ const practiceOptions = practiceAreas.map((p) => ({
 
   <AttorneysPreview
     attorneys={attorneysForPreview}
-    viewAllHref="/attorneys"
+    viewAllHref={`${import.meta.env.BASE_URL}attorneys`}
   />
 
   <SectionDivider />
 
   <NotableMattersStrip
     matters={mattersForStrip}
-    viewAllHref="/notable-matters"
+    viewAllHref={`${import.meta.env.BASE_URL}notable-matters`}
   />
 
   <SectionDivider />
 
   <InsightsPreview
     articles={insightsForPreview}
-    viewAllHref="/insights"
+    viewAllHref={`${import.meta.env.BASE_URL}insights`}
   />
 
   <SectionDivider />
