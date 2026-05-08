@@ -1,0 +1,286 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const practiceOptions = (await getCollection('practice-areas'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((p) => ({ slug: p.id, name: p.data.name }));
+
+const B = import.meta.env.BASE_URL;
+
+const address = {
+  street: '3403 Tenth Street, Suite 700',
+  city: 'Riverside',
+  state: 'CA',
+  zip: '92501',
+};
+
+const phone = '951-783-9470';
+const phoneDigits = phone.replace(/\D/g, '');
+const mapsQuery = encodeURIComponent(`${address.street}, ${address.city}, ${address.state} ${address.zip}`);
+
+const legalServiceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LegalService',
+  name: 'Stream Kim Hicks Wrage & Alfaro, P.C.',
+  url: new URL(B, Astro.site).href,
+  telephone: `+1${phoneDigits}`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: address.street,
+    addressLocality: address.city,
+    addressRegion: address.state,
+    postalCode: address.zip,
+    addressCountry: 'US',
+  },
+  areaServed: { '@type': 'State', name: 'California' },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL(B, Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'Contact', item: Astro.url.href },
+  ],
+};
+
+const directories = [
+  { name: 'Martindale-Hubbell', url: 'https://www.martindale.com/' },
+  { name: 'Super Lawyers', url: 'https://www.superlawyers.com/' },
+  { name: 'Avvo', url: 'https://www.avvo.com/' },
+  { name: 'State Bar of California', url: 'https://www.calbar.ca.gov/' },
+];
+---
+
+<BaseLayout
+  title="Contact | Stream Kim Hicks Wrage & Alfaro, P.C."
+  description="Contact Stream Kim Hicks Wrage & Alfaro, P.C. to schedule a consultation. 3403 Tenth Street, Suite 700, Riverside, CA 92501. Tel: 951-783-9470."
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(legalServiceSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
+
+  <!-- Hero -->
+  <div class="bg-charcoal py-20 lg:py-28">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brass mb-4">Contact</p>
+      <h1
+        class="font-display text-4xl lg:text-5xl font-medium text-bone leading-snug
+               tracking-[-0.02em]"
+      >
+        Schedule a Consultation
+      </h1>
+      <p class="mt-6 text-lg text-bone/80 max-w-2xl leading-relaxed">
+        Stream Kim represents institutions in complex civil disputes across California. To
+        discuss a matter, complete the form below or contact our Riverside office directly.
+      </p>
+    </div>
+  </div>
+
+  <!-- Contact info + form -->
+  <section aria-labelledby="contact-info-heading" class="bg-bone py-16 lg:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+        <!-- Office information -->
+        <div>
+          <h2
+            id="contact-info-heading"
+            class="font-display text-2xl font-medium text-charcoal leading-snug
+                   tracking-[-0.01em] mb-6"
+          >
+            Our Office
+          </h2>
+          <address class="not-italic space-y-1 text-base text-charcoal mb-6">
+            <p class="font-medium">Stream Kim Hicks Wrage &amp; Alfaro, P.C.</p>
+            <p>{address.street}</p>
+            <p>{address.city}, {address.state} {address.zip}</p>
+            <p class="mt-4">
+              <a
+                href={`tel:${phoneDigits}`}
+                class="text-bordeaux hover:underline underline-offset-4
+                       focus-visible:outline-2 focus-visible:outline-bordeaux focus-visible:outline-offset-2"
+              >
+                {phone}
+              </a>
+            </p>
+          </address>
+
+          <!-- Map placeholder -->
+          <div
+            class="aspect-video w-full bg-gray-100 flex flex-col items-center justify-center
+                   text-center px-6"
+            role="img"
+            aria-label={`Map showing ${address.street}, ${address.city}, ${address.state}`}
+          >
+            <p class="text-sm text-midgray mb-2">Map</p>
+            <a
+              href={`https://maps.google.com/?q=${mapsQuery}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm text-bordeaux hover:underline underline-offset-4
+                     focus-visible:outline-2 focus-visible:outline-bordeaux focus-visible:outline-offset-2"
+            >
+              Open in Google Maps
+              <span class="sr-only">(opens in a new tab)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Contact form (light background — fields styled for bone/white context) -->
+        <div>
+          <h2
+            class="font-display text-2xl font-medium text-charcoal leading-snug
+                   tracking-[-0.01em] mb-6"
+          >
+            Send a Message
+          </h2>
+
+          <form
+            action="[PLACEHOLDER — Formspree or Web3Forms endpoint]"
+            method="POST"
+            class="space-y-5"
+            novalidate
+          >
+            <!-- Name -->
+            <div class="flex flex-col gap-1">
+              <label for="c-name" class="block text-sm font-medium text-charcoal">
+                Full name <span class="text-bordeaux" aria-hidden="true">*</span>
+              </label>
+              <input
+                type="text"
+                id="c-name"
+                name="name"
+                required
+                placeholder="Jane Smith"
+                class="block w-full border border-charcoal/20 px-3 py-2 text-base text-charcoal
+                       bg-white focus:outline-none focus:ring-2 focus:ring-charcoal
+                       focus:border-charcoal transition-colors duration-150"
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="flex flex-col gap-1">
+              <label for="c-email" class="block text-sm font-medium text-charcoal">
+                Email address <span class="text-bordeaux" aria-hidden="true">*</span>
+              </label>
+              <input
+                type="email"
+                id="c-email"
+                name="email"
+                required
+                placeholder="you@example.com"
+                class="block w-full border border-charcoal/20 px-3 py-2 text-base text-charcoal
+                       bg-white focus:outline-none focus:ring-2 focus:ring-charcoal
+                       focus:border-charcoal transition-colors duration-150"
+              />
+            </div>
+
+            <!-- Phone (optional) -->
+            <div class="flex flex-col gap-1">
+              <label for="c-phone" class="block text-sm font-medium text-charcoal">
+                Phone number
+              </label>
+              <input
+                type="tel"
+                id="c-phone"
+                name="phone"
+                placeholder="(951) 555-0100"
+                class="block w-full border border-charcoal/20 px-3 py-2 text-base text-charcoal
+                       bg-white focus:outline-none focus:ring-2 focus:ring-charcoal
+                       focus:border-charcoal transition-colors duration-150"
+              />
+            </div>
+
+            <!-- Practice area -->
+            <div class="flex flex-col gap-1">
+              <label for="c-practice" class="block text-sm font-medium text-charcoal">
+                Practice area
+              </label>
+              <select
+                id="c-practice"
+                name="practice_area"
+                class="block w-full border border-charcoal/20 px-3 py-2 text-base text-charcoal
+                       bg-white focus:outline-none focus:ring-2 focus:ring-charcoal
+                       focus:border-charcoal transition-colors duration-150"
+              >
+                <option value="">Select a practice area (optional)</option>
+                {practiceOptions.map((p) => (
+                  <option value={p.slug}>{p.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <!-- Matter description -->
+            <div class="flex flex-col gap-1">
+              <label for="c-matter" class="block text-sm font-medium text-charcoal">
+                Brief description of your matter <span class="text-bordeaux" aria-hidden="true">*</span>
+              </label>
+              <textarea
+                id="c-matter"
+                name="matter"
+                required
+                rows={4}
+                placeholder="Describe your legal matter in a few sentences."
+                class="block w-full border border-charcoal/20 px-3 py-2 text-base text-charcoal
+                       bg-white focus:outline-none focus:ring-2 focus:ring-charcoal
+                       focus:border-charcoal transition-colors duration-150 resize-y"
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              class="inline-flex items-center justify-center min-h-[44px] px-6 py-2.5
+                     bg-charcoal text-white text-sm font-medium hover:bg-charcoal/90
+                     focus-visible:outline-2 focus-visible:outline-charcoal focus-visible:outline-offset-2
+                     transition-colors duration-150"
+            >
+              Schedule a Consultation
+            </button>
+          </form>
+
+          <p class="mt-6 text-xs text-midgray leading-relaxed">
+            Submission of this form does not create an attorney-client relationship. The
+            information on this website is for general informational purposes only and does
+            not constitute legal advice.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Legal directories -->
+  <section aria-labelledby="directories-heading" class="bg-white py-12 lg:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="directories-heading"
+        class="font-display text-2xl font-medium text-charcoal leading-snug
+               tracking-[-0.01em] mb-4"
+      >
+        Find Us Online
+      </h2>
+      <p class="text-sm text-midgray mb-6">
+        Stream Kim is listed in the following legal directories and rating services.
+      </p>
+      <ul class="flex flex-wrap gap-x-8 gap-y-3">
+        {directories.map((dir) => (
+          <li>
+            <a
+              href={dir.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm text-bordeaux hover:underline underline-offset-4
+                     focus-visible:outline-2 focus-visible:outline-bordeaux focus-visible:outline-offset-2"
+            >
+              {dir.name}
+              <span class="sr-only">(opens in a new tab)</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

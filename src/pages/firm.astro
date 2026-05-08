@@ -1,0 +1,206 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AttorneysPreview from '../components/sections/AttorneysPreview.astro';
+import ContactCTA from '../components/sections/ContactCTA.astro';
+import SectionDivider from '../components/ui/SectionDivider.astro';
+
+const attorneys = (await getCollection('attorneys')).sort(
+  (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999)
+);
+
+const attorneysForPreview = attorneys.map((a) => ({
+  name: a.data.name,
+  slug: a.id,
+  title: a.data.title,
+  practiceAreas: a.data.practiceAreas,
+  portrait: a.data.portrait,
+}));
+
+const practiceOptions = (await getCollection('practice-areas'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((p) => ({ slug: p.id, name: p.data.name }));
+
+const B = import.meta.env.BASE_URL;
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Stream Kim Hicks Wrage & Alfaro, P.C.',
+  url: new URL(B, Astro.site).href,
+  telephone: '+19517834470',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '3403 Tenth Street, Suite 700',
+    addressLocality: 'Riverside',
+    addressRegion: 'CA',
+    postalCode: '92501',
+    addressCountry: 'US',
+  },
+  description:
+    'A Riverside civil litigation firm representing public entities, healthcare providers, construction-industry clients, and businesses across California.',
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL(B, Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'The Firm', item: Astro.url.href },
+  ],
+};
+
+const communityOrgs = [
+  'American Heart Association',
+  'Riverside Chamber of Commerce',
+  'Riverside Legal Aid',
+  'Big Brothers Big Sisters',
+  'The Unforgettables Foundation',
+  'Habitat for Humanity',
+];
+---
+
+<BaseLayout
+  title="The Firm | Stream Kim Hicks Wrage & Alfaro, P.C."
+  description="Stream Kim is a Riverside civil litigation firm with more than a century of combined experience representing public entities, healthcare providers, and businesses across California."
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
+
+  <!-- Hero -->
+  <div class="bg-charcoal py-20 lg:py-28">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brass mb-4">
+        About the Firm
+      </p>
+      <h1
+        class="font-display text-4xl lg:text-5xl font-medium text-bone leading-snug
+               tracking-[-0.02em]"
+      >
+        Stream Kim Hicks Wrage &amp; Alfaro, P.C.
+      </h1>
+      <p class="mt-6 text-lg text-bone/80 max-w-3xl leading-relaxed">
+        A Riverside civil litigation firm with more than a century of combined experience
+        representing institutions in their highest-stakes disputes.
+      </p>
+    </div>
+  </div>
+
+  <!-- Overview -->
+  <section aria-labelledby="firm-overview-heading" class="bg-bone py-16 lg:py-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="firm-overview-heading"
+        class="font-display text-3xl font-medium text-charcoal leading-snug
+               tracking-[-0.01em] mb-8"
+      >
+        The Firm
+      </h2>
+      <div class="space-y-5 text-base leading-relaxed text-charcoal">
+        <p>
+          Stream Kim Hicks Wrage &amp; Alfaro, P.C. is a civil litigation firm based in
+          Riverside, California. The firm's attorneys bring more than a century of combined
+          experience to the defense of institutions facing complex civil litigation across the
+          state. Stream Kim's practice is concentrated in civil trial work for the regulated
+          industries and institutional clients that generate the most consequential disputes in
+          California courts: public entities, healthcare providers, construction-industry
+          participants, and businesses operating in demanding regulatory environments.
+        </p>
+        <p>
+          The firm represents the institutions that other parties typically sue — cities and
+          counties, hospital systems, general contractors, and regional businesses. This
+          defense-side orientation shapes both the firm's strategy and its client relationships.
+          Many of Stream Kim's institutional clients return matter after matter, relying on the
+          firm's attorneys as the outside counsel they reach for when the stakes are highest.
+        </p>
+        <p>
+          Stream Kim's attorneys handle the full lifecycle of civil litigation — from
+          pre-litigation strategy and Government Claims Act compliance through discovery, trial,
+          and appellate proceedings. The firm prepares every matter as though it will be tried,
+          because that preparation determines outcomes in the courtroom and at the settlement
+          table alike. When the matter is going to trial, Stream Kim is who other lawyers refer.
+        </p>
+        <p>
+          The firm is headquartered in Riverside, at the center of the Inland Empire — one of
+          California's fastest-growing economic regions. From that base, Stream Kim's attorneys
+          appear regularly in Riverside Superior Court, San Bernardino Superior Court, and the
+          United States District Courts for the Central and Eastern Districts of California, as
+          well as in the Ninth Circuit Court of Appeals.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Approach -->
+  <section aria-labelledby="approach-heading" class="bg-white py-16 lg:py-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="approach-heading"
+        class="font-display text-3xl font-medium text-charcoal leading-snug
+               tracking-[-0.01em] mb-10"
+      >
+        Our Approach
+      </h2>
+      <div class="space-y-8">
+        <p class="text-base leading-relaxed text-charcoal">
+          <strong class="font-semibold">Trial-ready from day one.</strong>{' '}
+          Stream Kim prepares every matter for trial, regardless of how it ultimately resolves.
+          That orientation — toward evidence, witnesses, and the courtroom — shapes how the firm
+          conducts discovery, engages experts, and advises clients on risk and on when to fight.
+        </p>
+        <p class="text-base leading-relaxed text-charcoal">
+          <strong class="font-semibold">Deep industry knowledge.</strong>{' '}
+          The firm's regulated-industry focus means its attorneys understand the operational
+          context behind each dispute — the compliance frameworks, the institutional
+          relationships, and the reputational stakes that accompany litigation for public
+          agencies, healthcare systems, and businesses in regulated sectors.
+        </p>
+        <p class="text-base leading-relaxed text-charcoal">
+          <strong class="font-semibold">Rooted in the Inland Empire.</strong>{' '}
+          Stream Kim has practiced in Riverside for decades. Its attorneys know the courts,
+          the judges, and the procedural landscape of the Inland Empire, and they have built
+          lasting relationships with the institutional clients who drive the region's economy.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Attorneys preview -->
+  <AttorneysPreview attorneys={attorneysForPreview} viewAllHref={`${B}attorneys`} />
+
+  <!-- Community Involvement -->
+  <section aria-labelledby="community-heading" class="bg-bone py-16 lg:py-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        id="community-heading"
+        class="font-display text-3xl font-medium text-charcoal leading-snug
+               tracking-[-0.01em] mb-6"
+      >
+        Community Involvement
+      </h2>
+      <p class="text-base leading-relaxed text-charcoal mb-8">
+        Stream Kim's attorneys are active in the Riverside community and in organizations that
+        serve the Inland Empire and California more broadly. The firm supports and participates in:
+      </p>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {communityOrgs.map((org) => (
+          <li class="flex items-start gap-2 text-sm text-charcoal">
+            <span class="text-brass shrink-0 mt-0.5" aria-hidden="true">—</span>
+            {org}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  <ContactCTA
+    heading="Discuss a Matter"
+    formAction="[PLACEHOLDER — Formspree endpoint, see docs/launch-checklist.md]"
+    practiceOptions={practiceOptions}
+    id="contact"
+  />
+</BaseLayout>

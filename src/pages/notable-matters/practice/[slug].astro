@@ -1,0 +1,139 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import NotableMatterCard from '../../../components/sections/NotableMatterCard.astro';
+
+export async function getStaticPaths() {
+  const practices = await getCollection('practice-areas');
+  const allMatters = (await getCollection('notable-matters')).sort(
+    (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999)
+  );
+
+  // Only generate a route for practice areas that have at least one matter
+  return practices
+    .map((practice) => ({
+      practice,
+      matters: allMatters.filter((m) => m.data.practiceArea === practice.id),
+    }))
+    .filter(({ matters }) => matters.length > 0)
+    .map(({ practice, matters }) => ({
+      params: { slug: practice.id },
+      props: { practice, matters },
+    }));
+}
+
+const {
+  practice,
+  matters,
+}: {
+  practice: CollectionEntry<'practice-areas'>;
+  matters: CollectionEntry<'notable-matters'>[];
+} = Astro.props;
+
+// Filter strip: all practices with matters, for the nav
+const allMatters = await getCollection('notable-matters');
+const practicesWithMatters = new Set(allMatters.map((m) => m.data.practiceArea));
+const allPractices = (await getCollection('practice-areas'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .filter((p) => practicesWithMatters.has(p.id));
+
+const B = import.meta.env.BASE_URL;
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL(B, Astro.site).href },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Representative Matters',
+      item: new URL(`${B}notable-matters`, Astro.site).href,
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: practice.data.name,
+      item: Astro.url.href,
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={`${practice.data.name} — Representative Matters | Stream Kim Hicks Wrage & Alfaro, P.C.`}
+  description={`Representative matters from Stream Kim's ${practice.data.name.toLowerCase()} practice, described in accordance with California Rules of Professional Conduct.`}
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
+
+  <!-- Page header and filter strip -->
+  <div class="bg-bone py-16 lg:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <header class="mb-10">
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brass mb-4">
+          Representative Matters
+        </p>
+        <h1
+          class="font-display text-4xl lg:text-5xl font-medium text-charcoal leading-snug
+                 tracking-[-0.02em]"
+        >
+          {practice.data.name} — Representative Matters
+        </h1>
+      </header>
+
+      <!-- Filter strip with current practice highlighted -->
+      {allPractices.length > 0 && (
+        <nav aria-label="Filter by practice area">
+          <ul class="flex flex-wrap gap-2">
+            <li>
+              <a
+                href={`${B}notable-matters`}
+                class="inline-block text-sm px-3 py-1.5 border border-charcoal/20
+                       text-charcoal hover:border-bordeaux hover:text-bordeaux
+                       transition-colors duration-150"
+              >
+                All
+              </a>
+            </li>
+            {allPractices.map((p) => (
+              <li>
+                <a
+                  href={`${B}notable-matters/practice/${p.id}`}
+                  aria-current={p.id === practice.id ? 'page' : undefined}
+                  class={
+                    p.id === practice.id
+                      ? 'inline-block text-sm px-3 py-1.5 border border-bordeaux text-bordeaux font-medium'
+                      : 'inline-block text-sm px-3 py-1.5 border border-charcoal/20 text-charcoal hover:border-bordeaux hover:text-bordeaux transition-colors duration-150'
+                  }
+                >
+                  {p.data.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
+    </div>
+  </div>
+
+  <!-- Matters grid -->
+  <div class="bg-charcoal py-16 lg:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {matters.map((matter) => (
+          <NotableMatterCard
+            title={matter.data.title}
+            practiceArea={matter.data.practiceArea}
+            description={matter.data.description}
+            outcome={matter.data.outcome}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
